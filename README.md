@@ -2,4 +2,4 @@ Examples
 ===========
 
 These are example code for University of Wyoming, Cosc 4730 Mobile Programming course.
-All examples are for Android.
+Most examples are for Android, except TCPclient and TCPserv are only java network code.
