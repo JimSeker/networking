@@ -4,9 +4,12 @@
 	android:versionCode="1"
 	android:versionName="1.0" >
 
+    	<uses-sdk android:minSdkVersion="10" android:targetSdkVersion="20"/>
+
+	<uses-permission android:name="android.permission.INTERNET" />
 	<application
 		android:icon="@drawable/icon"
-		android:label="@string/app_name" >
+		android:label="@string/app_name" android:allowBackup="true">
 		<activity
 			android:name=".TCPserv"
 			android:label="@string/app_name" >
@@ -18,8 +21,6 @@
 		</activity>
 	</application>
 
-	<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="10"/>
 
-	<uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

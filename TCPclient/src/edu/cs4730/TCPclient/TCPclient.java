@@ -17,6 +17,11 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket; 
 
+/*
+ * this is a simple network client example.  Note it assumes you are using the emulators, but will work
+ * on phones as well.  You just need to know the IP address.
+ * 
+ */
 
 public class TCPclient extends Activity implements Button.OnClickListener{
     /** Called when the activity is first created. */
@@ -64,6 +69,11 @@ public class TCPclient extends Activity implements Button.OnClickListener{
 		msg.setData(b);
 	    handler.sendMessage(msg);
     }
+    
+    /*
+     * this code does most of the work in a thread, so that it doesn't lock up the main (UI) thread
+     * It call mkmsg (which calls the handler to update the screen)
+     */
     class doNetwork  implements Runnable {
     	public PrintWriter out;
     	public  BufferedReader in;

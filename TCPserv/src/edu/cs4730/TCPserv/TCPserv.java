@@ -18,7 +18,10 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket; 
 
-
+/*
+ * This a simple network server code.  The user must push the make connection button to setup the 
+ * server to accept connections.
+ */
 public class TCPserv extends Activity implements Button.OnClickListener{
 	
 	   TextView output;
@@ -58,6 +61,11 @@ public class TCPserv extends Activity implements Button.OnClickListener{
 		msg.setData(b);
 	    handler.sendMessage(msg);
     }
+    
+    /* 
+     * Most of the work is done here, so it does not lock the UI thread.  Calls the handler to 
+     * do the screen updates.
+     */
     class doNetwork  implements Runnable {
     	public void run() {
 
@@ -93,9 +101,11 @@ public class TCPserv extends Activity implements Button.OnClickListener{
                     
                  } finally {
                 	 mkmsg("We are done, closing connection\n");
-                          client.close();
+                          client.close();  //close the client connection
+                          serverSocket.close();  //finally close down the server side as well.
                      }
-              }      
+              }   
+
           } catch (Exception e) {
         	  mkmsg("Unable to connect...\n");
           } 
