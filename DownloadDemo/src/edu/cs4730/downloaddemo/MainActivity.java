@@ -1,12 +1,12 @@
 package edu.cs4730.downloaddemo;
 
 import java.io.FileNotFoundException;
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
 
 	//big file, takes about 30 seconds to download
 	//String Download_path = "http://www.nasa.gov/images/content/206402main_jsc2007e113280_hires.jpg";
-    //smaller test file.
+	//smaller test file.
 	String Download_path = "http://www.cs.uwyo.edu/~seker/courses/2150/30mbHD.jpg";
 	long download_id =-1;
 
@@ -54,31 +54,32 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
+				//setup download and how it will look on the notification bar.
 				Uri Download_Uri = Uri.parse(Download_path);
 				DownloadManager.Request request = new DownloadManager.Request(Download_Uri)
-		        .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
-		        .setAllowedOverRoaming(false)
-		        .setTitle("file nasa")
-		        .setDescription("stuff ok.")
-		        .setShowRunningNotification(true)
-		        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "nasapic.jpg"); 				
+				.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
+				.setAllowedOverRoaming(false)
+				.setTitle("file nasa")
+				.setDescription("stuff ok.")
+				.setShowRunningNotification(true)
+				.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "nasapic.jpg"); 				
 				download_id = downloadManager.enqueue(request);
 
 			}});
 		Button btnDownload2 = (Button)findViewById(R.id.download2);
 		btnDownload2.setOnClickListener(new Button.OnClickListener(){
 
+			@SuppressLint("NewApi")
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				Uri Download_Uri = Uri.parse(Download_path);
 				DownloadManager.Request request = new DownloadManager.Request(Download_Uri)
-		        //.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-		        //.setAllowedOverRoaming(true)
-		        .setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)  //api 11 and above!
-		        //.setShowRunningNotification(true)   //api 10 and below.  Doesn't work on 4.1.1 must use above.
-		        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "nasapic.jpg"); 				
+				//.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+				//.setAllowedOverRoaming(true)
+				.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)  //api 11 and above!
+				//.setShowRunningNotification(true)   //api 10 and below.  Doesn't work on 4.1.1 must use above.
+				.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "nasapic.jpg"); 				
 				download_id = downloadManager.enqueue(request);
 
 			}});
@@ -108,11 +109,11 @@ public class MainActivity extends Activity {
 			String action = intent.getAction();
 			if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
 				Bundle extras = intent.getExtras();
-                intentdownloadId = extras.getLong(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+				intentdownloadId = extras.getLong(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
 				Toast.makeText(MainActivity.this,	"should match: id is " + download_id+ " int_id is " + intentdownloadId,
 						Toast.LENGTH_LONG).show();
 			}   
-                
+
 			DownloadManager.Query query = new DownloadManager.Query();
 			query.setFilterById(intentdownloadId);
 			Cursor cursor = downloadManager.query(query);
@@ -125,12 +126,12 @@ public class MainActivity extends Activity {
 				int columnFname = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME);
 				String Fname;
 				if (columnFname >=0) {
-				  Fname = cursor.getString(columnFname);
+					Fname = cursor.getString(columnFname);
 				} else {
 					Fname = "unknown";
 				}
 				if(status == DownloadManager.STATUS_SUCCESSFUL){
-					
+
 					ParcelFileDescriptor file;
 					try {
 						file = downloadManager.openDownloadedFile(intentdownloadId);
