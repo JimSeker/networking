@@ -50,8 +50,11 @@ public class TCPclient extends Activity implements Button.OnClickListener{
 		doNetwork stuff = new doNetwork();
 		myNet = new Thread(stuff);
 		myNet.start();
-		//((doNetwork) myNet).out.println("hi");
-		stuff.out.println("");
+		
+		//An example of how you would write from here via the thread.  Note,
+		//this will likely force close here, because the connection is not fully made at this point.
+		//the thread just started.
+		//stuff.out.println("hi there.");
 
 	}
     private Handler handler = new Handler() {

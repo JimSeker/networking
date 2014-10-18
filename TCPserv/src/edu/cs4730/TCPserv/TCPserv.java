@@ -14,13 +14,15 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket; 
 
 /*
  * This a simple network server code.  The user must push the make connection button to setup the 
  * server to accept connections.
+ * 
+ * Note use adb forward tcp:3012 tcp:3012
+ * to setup the emulator to receive.  
  */
 public class TCPserv extends Activity implements Button.OnClickListener{
 	
@@ -65,6 +67,10 @@ public class TCPserv extends Activity implements Button.OnClickListener{
     /* 
      * Most of the work is done here, so it does not lock the UI thread.  Calls the handler to 
      * do the screen updates.
+     * 
+     * protocol for the example is the server reads in a line and then sends a line.
+     * then it closes the connection.
+     * 
      */
     class doNetwork  implements Runnable {
     	public void run() {
