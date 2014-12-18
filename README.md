@@ -1,5 +1,8 @@
 Android Network Examples
 ===========
+JavaNetwork/ is simple client and server code in java (not Android)
+
+eclipse/ is the examples for use in eclipse.  This is no longer updated.  The rest of the examples are in Android studio format.
 
 DownloadDemo shows how to use the Download service in android to files via http protocol.  ie downloading pictures.
 
@@ -9,5 +12,4 @@ HTTPClientDemo 1 and 2, shows httpclient code 1 with a thread, 2 with a asynctas
 
 WebVeiwDemo shows how to use the webView widget.
 
-These are example code for University of Wyoming, Cosc 4730 Mobile Programming course.
-Most examples are for Android.
+These are example code for University of Wyoming, Cosc 4730 Mobile Programming course.  Most examples are for Android.
