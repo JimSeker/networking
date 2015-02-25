@@ -5,18 +5,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
-import android.preference.PreferenceManager;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
-import android.view.Menu;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -30,7 +25,7 @@ import android.widget.Toast;
  */
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
 
 	//big file, takes about 30 seconds to download
 	//String Download_path = "http://www.nasa.gov/images/content/206402main_jsc2007e113280_hires.jpg";
@@ -38,7 +33,7 @@ public class MainActivity extends Activity {
 	String Download_path = "http://www.cs.uwyo.edu/~seker/courses/2150/30mbHD.jpg";
 	long download_id =-1;
 
-	SharedPreferences preferenceManager;
+	//SharedPreferences preferenceManager;
 	DownloadManager downloadManager;
 
 	/** Called when the activity is first created. */
@@ -69,10 +64,9 @@ public class MainActivity extends Activity {
 		Button btnDownload2 = (Button)findViewById(R.id.download2);
 		btnDownload2.setOnClickListener(new Button.OnClickListener(){
 
-			@SuppressLint("NewApi")
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
+
 				Uri Download_Uri = Uri.parse(Download_path);
 				DownloadManager.Request request = new DownloadManager.Request(Download_Uri)
 				//.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
@@ -87,7 +81,7 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
+
 		super.onResume();
 
 		IntentFilter intentFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
@@ -96,7 +90,6 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 
 		unregisterReceiver(downloadReceiver);
@@ -139,7 +132,7 @@ public class MainActivity extends Activity {
 								"File Downloaded: " +Fname +" and ready to process",
 								Toast.LENGTH_LONG).show();
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
+
 						e.printStackTrace();
 						Toast.makeText(MainActivity.this,
 								e.toString(),
