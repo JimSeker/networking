@@ -2,7 +2,7 @@ package edu.cs4730.httpclientdemo2;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,7 +18,13 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-public class HttpClientDemo extends ActionBarActivity implements Button.OnClickListener {
+/*
+ * note, this example needs to be replaced with the HttpURLConnection instead of HttpClient...
+ * http://android-developers.blogspot.com/2011/09/androids-http-clients.html
+ */
+
+
+public class HttpClientDemo extends AppCompatActivity implements Button.OnClickListener {
     TextView output;
     Button mkconn;
 

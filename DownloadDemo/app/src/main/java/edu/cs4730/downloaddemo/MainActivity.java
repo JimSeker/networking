@@ -11,7 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -25,7 +25,7 @@ import android.widget.Toast;
  */
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
 	//big file, takes about 30 seconds to download
 	//String Download_path = "http://www.nasa.gov/images/content/206402main_jsc2007e113280_hires.jpg";
