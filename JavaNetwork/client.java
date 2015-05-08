@@ -20,6 +20,7 @@ public class client{
 	  //wait for user input and follow directions
   	  while (true) {
 		//read in from commandline ... have to find that command again...
+		System.out.print("Enter r to read, w to write, q to quit: " );
 		tempc = getLineS();
 		if (tempc.equals("r")) {
 			//read in from command line
