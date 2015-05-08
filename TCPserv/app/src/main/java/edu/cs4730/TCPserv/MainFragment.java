@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,8 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
     Button mkconn;
     EditText port;
     Thread myNet;
+
+    String TAG = "TCPserv";
 
     public MainFragment() {
         // Required empty public constructor
@@ -91,55 +94,53 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
      */
     class doNetwork implements Runnable {
         public void run() {
-            ServerSocket serverSocket = null;
 
             int p = Integer.parseInt(port.getText().toString());
             mkmsg(" Port is " + p + "\n");
 
             try {
                 mkmsg("Waiting on Connecting...\n");
-                System.out.println("S: Connecting...");
-                serverSocket = new ServerSocket(p);
-            } catch (Exception e) {
-                mkmsg("Unable to create socket...\n");
-                return;
-            }
+                Log.v(TAG,"S: Connecting...");
+                ServerSocket serverSocket = new ServerSocket(p);
 
-            Socket client = null;
-            try {
-                client = serverSocket.accept();
-                System.out.println("S: Receiving...");
+                //socket created, now wait for a coonection via accept.
+                Socket client = serverSocket.accept();
+                Log.v(TAG,"S: Receiving...");
 
-                mkmsg("Attempting to receive a message ...\n");
-                BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                String str = in.readLine();
-                mkmsg("received a message:\n" + str + "\n");
-
-                String message = "Hello from server android emulator";
-
-                PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())), true);
-                mkmsg("Attempting to send message ...\n");
-                out.println(message);
-                mkmsg("Message sent...\n");
-
-
-            } catch (Exception e) {
-                mkmsg("Error happened sending/receiving\n");
-
-            } finally {
-                mkmsg("We are done, closing connection\n");
                 try {
-                    if (client != null) {
-                        client.close();  //close the client connection
-                    }
-                    if (!serverSocket.isClosed())
-                        serverSocket.close();  //finally close down the server side as well.
-                } catch (Exception e) {
-                    mkmsg("failed to close client or server socket\n");
-                }
-            }
-        }
+                    //setup send/receive streams.
+                    BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                    PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())), true);
 
+                    //receive the message first.
+                    mkmsg("Attempting to receive a message ...\n");
+                    String str = in.readLine();
+                    mkmsg("received a message:\n" + str + "\n");
+
+                    //now send a message.
+                    String message = "Hello from server android emulator";
+                    mkmsg("Attempting to send message ...\n");
+                    out.println(message);
+                    mkmsg("Message sent...\n");
+
+                    //now close down the send/receive streams.
+                    in.close();
+                    out.close();
+
+                } catch (Exception e) {
+                    mkmsg("Error happened sending/receiving\n");
+
+                } finally {
+                    mkmsg("We are done, closing connection\n");
+                    client.close();  //close the client connection
+                    serverSocket.close();  //finally close down the server side as well.
+                }
+
+            } catch (Exception e) {
+                mkmsg("Unable to connect...\n");
+            }
+
+        }
     }
 
 }
