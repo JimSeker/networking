@@ -2,4 +2,7 @@
 <resources>
     <string name="hello">Hello World, TCPserv!</string>
     <string name="app_name">TCP Server</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
