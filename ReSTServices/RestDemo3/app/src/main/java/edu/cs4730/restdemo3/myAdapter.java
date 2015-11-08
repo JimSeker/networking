@@ -45,6 +45,7 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
     ArrayList<myObj> list = null;
     PictureFragment myDialog;
     FragmentManager fm;
+    Bitmap loading;
 
     public myAdapter(ArrayList<myObj> mlist, int mrowLayout, Context context, FragmentManager mfm) {
         list = mlist;
@@ -52,6 +53,7 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
         mContext = context;
         fm = mfm;
         myDialog = new PictureFragment();
+        loading = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.loading);
     }
 
     @Override
@@ -65,6 +67,7 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
 
         viewHolder.id = i;
         viewHolder.title.setText(list.get(i).title);
+        viewHolder.pic.setImageBitmap(loading);
         new getPic().execute(new myObjURL(list.get(i).piclocation,viewHolder));
         viewHolder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
