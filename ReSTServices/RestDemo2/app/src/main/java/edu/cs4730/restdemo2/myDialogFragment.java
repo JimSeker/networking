@@ -13,12 +13,7 @@ import android.widget.EditText;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link myDialogFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link myDialogFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * a dialog to add a new entry or edit an existing entry.
  */
 public class myDialogFragment extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match

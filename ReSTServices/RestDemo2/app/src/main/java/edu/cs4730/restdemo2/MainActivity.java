@@ -37,6 +37,9 @@ import java.util.Map;
 
 /*
  * an example of custom rest service.  Note, the rest service here will only answer to ip from on UW's campus
+ * The service has a query.php, insert.php, update.php, and delete.php
+ * The data returned from query is in a csv format.  The other three return a number that states
+ * how "objects" where changed.
  *
  * Authenticator info can be found here
  * http://docs.oracle.com/javase/6/docs/technotes/guides/net/http-auth.html  and
@@ -197,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         new doNetwork().execute(uri);
     }
 
-    //fragment listener for update/add.
+    //fragment listener for update/add for myDialogFragment
     //then setup the data structure for either update or insert and call the asynctask to do the work.
     @Override
     public void onFragmentInteraction(Boolean update, int id, String title, String body) {
@@ -240,7 +243,9 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
 
 
     /*
-    * Shows how to use an AsyncTask with a HttpClient method to query the REST service.
+    * uses an AsyncTask with a httpURLConnection method to query the REST service.
+    * The data is constructed in the progress method and in the post the data is added to the
+    * adapter for the recyclerview.
     */
     class doNetwork extends AsyncTask<URI, String, String> {
 
@@ -251,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
          * This downloads a text file and returns it to doInBackground.
          */
         //Simple class that takes an InputStream and return the data
-        //as a string, with line sepratorss (ie end of line markers)
+        //as a string, with line separators (ie end of line markers)
         private String readStream(InputStream in) {
             BufferedReader reader = null;
             StringBuilder sb = new StringBuilder("");
@@ -299,12 +304,10 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         }
 
         /*
-         * This takes the place of handlers and my makemsg method, since we can directly access the screen.
+         * build the data structure.
          */
         protected void onProgressUpdate(String... progress) {
             //build the data structure as we go.
-            // output.append(progress[0]);
-            //Log.v("progress", progress[0]);
             try {
                 String parts[] = progress[0].split(",");
                 list.add(new myObj(Integer.valueOf(parts[0]), parts[1], parts[2]));
@@ -314,8 +317,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         }
 
         /*
-         * So the file has been downloaded and in this simple example it is displayed
-         * to the screen.
+         * finished, new set the adapter with the data and turn off the refresh.
          */
         protected void onPostExecute(String result) {
             //data structure is ready.
@@ -323,6 +325,13 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
             mSwipeRefreshLayout.setRefreshing(false);  //turn of the refresh.
         }
     }
+
+    /*
+     *this asynctask is passing parameters via post to the rest service.
+     * The post parameters are setup correctly in the dataAsync method that is
+     * passed to the task.  It then open the connection, passes the parameters, authenicates
+     * and toasts the return value.
+     */
 
     class doRest extends AsyncTask<myDataAsync, String, Integer> {
 
@@ -334,10 +343,11 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
             try {
                 //setup password authentication
                 Authenticator.setDefault(new MyAuthenticator());
-                //URL url = new URL(params[0].toString()); //but next line is much better! convert directly.
+                //setup the url
                 URL url = params[0].uri.toURL();
-
+                //make the connection
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                //setup as post method and write out the parameters.
                 con.setRequestMethod("POST");
                 con.setDoInput(true);
                 con.setDoOutput(true);
@@ -345,13 +355,15 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
                 writer.write(params[0].data);
-
                 writer.flush();
                 writer.close();
                 os.close();
+
+                //get the response code (ie success 200 or something else
                 int responseCode = con.getResponseCode();
                 String response = "";
                 //the return is a single number, so simple to read like this:
+                //note the while loop should not be necessary, but just in case.
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     String line;
                     BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -363,8 +375,9 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
 
                 return Integer.valueOf(response);
             } catch (Exception e) {
-                // publishProgress("Failed to retrieve web page ...\n");
-                //publishProgress(e.getMessage());
+                // failure of some kind.  uncomment the stacktrace to see what happened if it is
+                // permit error.
+                //e.printStackTrace();
                 return 0;
             }
 
