@@ -1,20 +1,12 @@
-package edu.cs4730.TCPserv;
+package edu.cs4730.tcpserv;
 
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 
-/*  Nothing to see here, got MainFragment
- *
- * Note use adb forward tcp:3012 tcp:3012
- * to setup the emulator to receive.  
- */
 public class MainActivity extends AppCompatActivity {
-	
 
-    /** Called when the activity is first created. */
-	
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
@@ -22,5 +14,4 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.container, new MainFragment()).commit();
         }
     }
-
 }

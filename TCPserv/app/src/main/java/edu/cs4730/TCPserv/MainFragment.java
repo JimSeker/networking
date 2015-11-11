@@ -1,9 +1,12 @@
-package edu.cs4730.TCPserv;
+package edu.cs4730.tcpserv;
 
+import android.app.Service;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +52,11 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         port = (EditText) myView.findViewById(R.id.ETport);
         mkconn = (Button) myView.findViewById(R.id.makeconn);
         mkconn.setOnClickListener(this);
+
+        //What is our IP address?   Fails on Marshmallow....
+        WifiManager wm = (WifiManager) getActivity().getSystemService(Service.WIFI_SERVICE);
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+        output.append("Server IP address is " + ip);
         return myView;
     }
 
