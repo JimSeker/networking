@@ -1,15 +1,12 @@
-package edu.cs4730.TCPclient;
+package edu.cs4730.tcpclient;
 
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
-//Nothing to see here.  Goto MainFragment.
+import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
-    /** Called when the activity is first created. */
 
-	@Override
-    public void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {

@@ -9,7 +9,7 @@
         android:id="@+id/widget29"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="TCP client demo"></TextView>
+        android:text="TCP client demo"/>
 
     <LinearLayout
         android:id="@+id/widget41"
@@ -20,14 +20,14 @@
             android:id="@+id/TVhostname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hostname: "></TextView>
+            android:text="Hostname: "/>
 
         <EditText
             android:id="@+id/EThostname"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="k2.cs.uwyo.edu"
-            android:textSize="18sp"></EditText>
+            android:textSize="18sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -39,14 +39,14 @@
             android:id="@+id/TVport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="port: "></TextView>
+            android:text="port: "/>
 
         <EditText
             android:id="@+id/ETport"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="3012"
-            android:textSize="18sp"></EditText>
+            android:textSize="18sp"/>
     </LinearLayout>
 
     <Button
@@ -54,8 +54,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:padding="10px"
-        android:text="  Make Connection  "></Button>
+        android:padding="10dp"
+        android:focusableInTouchMode="true"
+        android:text="  Make Connection  ">
+        <requestFocus/>
+    </Button>
 
     <ScrollView
         android:id="@+id/horizontalScrollView1"
@@ -66,7 +69,7 @@
             android:id="@+id/output"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="output: "></TextView>
+            android:text="output: "/>
     </ScrollView>
 
 </LinearLayout>
