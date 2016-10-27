@@ -56,7 +56,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         //What is our IP address?
         WifiManager wm = (WifiManager) getActivity().getSystemService(Service.WIFI_SERVICE);
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-        output.append("Server IP address is " + ip);
+        output.append("Server IP address is " + ip +"\n");
         return myView;
     }
 
