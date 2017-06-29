@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -163,10 +164,8 @@ public class MainActivity extends AppCompatActivity {
                     Fname = "unknown";
                 }
                 if (status == DownloadManager.STATUS_SUCCESSFUL) {
-
-                    ParcelFileDescriptor file;
                     try {
-                        file = downloadManager.openDownloadedFile(intentdownloadId);
+                        ParcelFileDescriptor file = downloadManager.openDownloadedFile(intentdownloadId);
                         Toast.makeText(MainActivity.this,
                                 "File Downloaded: " + Fname + " and ready to process",
                                 Toast.LENGTH_LONG).show();
@@ -204,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
     //handle the response.
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_PERM_ACCESS_noti: {
                 // If request is cancelled, the result arrays are empty.
@@ -236,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
                     // functionality that depends on this permission.
                     Log.v(TAG, "write permissions not granted.");
                 }
-                return;
             }
             // other 'case' lines to check for other
             // permissions this app might request
