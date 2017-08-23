@@ -47,14 +47,15 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View myView = inflater.inflate(R.layout.fragment_main, container, false);
-        output = (TextView) myView.findViewById(R.id.output);
+        output = myView.findViewById(R.id.output);
         output.append("\n\n");
-        port = (EditText) myView.findViewById(R.id.ETport);
-        mkconn = (Button) myView.findViewById(R.id.makeconn);
+        port = myView.findViewById(R.id.ETport);
+        mkconn = myView.findViewById(R.id.makeconn);
         mkconn.setOnClickListener(this);
 
         //What is our IP address?
         WifiManager wm = (WifiManager) getActivity().getApplicationContext().getSystemService(Service.WIFI_SERVICE);
+        //noinspection deprecation    wifi can't return a ipv6, which is what the issue is, formater doesn't support ipv6
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
         output.append("Server IP address is " + ip +"\n");
         return myView;
@@ -100,7 +101,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
      * then it closes the connection.
      *
      */
-    class doNetwork implements Runnable {
+    private class doNetwork implements Runnable {
         public void run() {
 
             int p = Integer.parseInt(port.getText().toString());
