@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
  * the adapter.
  */
 
-public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
+class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
 
     private ArrayList<myObj> myList;
     private int rowLayout;
@@ -29,16 +28,16 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
     // Define listener member variable
     private OnItemClickListener listener;
     // Define the listener interface
-    public interface OnItemClickListener {
+    interface OnItemClickListener {
         void onItemClick(String mid, String mtitle, String mbody);
     }
     // Define the method that allows the parent activity or fragment to define the listener
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
 
-    public myAdapter(ArrayList<myObj> myList, int rowLayout, Context context) {
+    myAdapter(ArrayList<myObj> myList, int rowLayout, Context context) {
         this.myList = myList;
         this.rowLayout = rowLayout;
         this.mContext = context;
@@ -83,18 +82,18 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvID;
-        public TextView title;
-        public TextView body;
-        public CardView cardview;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvID;
+        TextView title;
+        TextView body;
+        CardView cardview;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-            tvID = (TextView) itemView.findViewById(R.id.tv_id);
-            title = (TextView) itemView.findViewById(R.id.tv_title);
-            body = (TextView) itemView.findViewById(R.id.tv_body);
-            cardview = (CardView) itemView.findViewById(R.id.cardview);
+            tvID =  itemView.findViewById(R.id.tv_id);
+            title =  itemView.findViewById(R.id.tv_title);
+            body = itemView.findViewById(R.id.tv_body);
+            cardview =  itemView.findViewById(R.id.cardview);
         }
     }
 }

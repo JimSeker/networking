@@ -1,9 +1,8 @@
 package edu.cs4730.restdemo2;
 
 import android.app.Activity;
-import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +15,13 @@ import android.widget.EditText;
  * a dialog to add a new entry or edit an existing entry.
  */
 public class myDialogFragment extends DialogFragment {
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
     private static final String ARG_PARAM4 = "param4";
 
-    // TODO: Rename and change types of parameters
     private Boolean mParam1;
     private int mParam2;
     private String mParam3;
@@ -38,12 +36,11 @@ public class myDialogFragment extends DialogFragment {
      * this fragment using the provided parameters.
      *
      * @param update or update a value.
-     * @param id Parameter 2.
-     * @param title Parameter 3.
-     * @param body Parameter 4.
+     * @param id     Parameter 2.
+     * @param title  Parameter 3.
+     * @param body   Parameter 4.
      * @return A new instance of fragment myDialogFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static myDialogFragment newInstance(Boolean update, int id, String title, String body) {
         myDialogFragment fragment = new myDialogFragment();
         Bundle args = new Bundle();
@@ -76,10 +73,10 @@ public class myDialogFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View myView = inflater.inflate(R.layout.fragment_my_dialog, container, false);
 
-        mTitle = (EditText) myView.findViewById(R.id.et_title);
-        mBody = (EditText) myView.findViewById(R.id.et_body);
-        mCancel = (Button) myView.findViewById(R.id.btn_cancel);
-        mSave = (Button) myView.findViewById(R.id.btn_save);
+        mTitle = myView.findViewById(R.id.et_title);
+        mBody = myView.findViewById(R.id.et_body);
+        mCancel = myView.findViewById(R.id.btn_cancel);
+        mSave = myView.findViewById(R.id.btn_save);
         if (mParam1) { //true it's an update
             mTitle.setText(mParam3);
             mBody.setText(mParam4);
@@ -99,7 +96,7 @@ public class myDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.onFragmentInteraction(mParam1, mParam2,mTitle.getText().toString(), mBody.getText().toString());
+                    mListener.onFragmentInteraction(mParam1, mParam2, mTitle.getText().toString(), mBody.getText().toString());
                 }
                 dismiss();
             }
@@ -108,8 +105,15 @@ public class myDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity;
+
+        if (context instanceof Activity) {
+            activity = (Activity) context;
+        } else {
+            activity = getActivity();
+        }
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -134,9 +138,9 @@ public class myDialogFragment extends DialogFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    interface OnFragmentInteractionListener {
 
-        public void onFragmentInteraction(Boolean update, int id, String title, String body);
+        void onFragmentInteraction(Boolean update, int id, String title, String body);
     }
 
 }

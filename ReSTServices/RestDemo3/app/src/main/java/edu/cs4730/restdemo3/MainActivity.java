@@ -12,8 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,10 +34,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //setup the RecyclerView
-        mRecyclerView = (RecyclerView) findViewById(R.id.list);
+        mRecyclerView = findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //setup the adapter, which is myAdapter, see the code.  set it initially to null
@@ -61,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         //SwipeRefreshlayout setup.
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout = findViewById(R.id.activity_main_swipe_refresh_layout);
         //setup some colors for the refresh circle.
         mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         //now setup the swiperefrestlayout listener where the main work is done.
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     /*
  * Shows how to use an AsyncTask with a httpURLconnection method to query the REST service.
  */
-    class doNetwork extends AsyncTask<URL, String, String> {
+    private class doNetwork extends AsyncTask<URL, String, String> {
         ArrayList<myObj> list = null;
         //Simple class that takes an InputStream and return the data
         //as a string, with line sepratorss (ie end of line markers)

@@ -11,8 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     SwipeRefreshLayout mSwipeRefreshLayout;
     JSONArray list = null;
     URI uri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,14 +80,14 @@ public class MainActivity extends AppCompatActivity {
         });
         mSwipeRefreshLayout.setRefreshing(true);
         //call the refresh code manually here.
-         new doNetwork().execute(uri);
+        new doNetwork().execute(uri);
 
     }
 
     /*
-* Shows how to use an AsyncTask with a HttpClient method.
-*/
-    class doNetwork extends AsyncTask<URI, String, String> {
+    * Shows how to use an AsyncTask with a HttpClient method.
+    */
+    private class doNetwork extends AsyncTask<URI, String, String> {
 
         /*
          * while this could have been in the doInBackground, I reused the
@@ -133,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 page = readStream(con.getInputStream());
                 con.disconnect();
             } catch (Exception e) {
-               // publishProgress("Failed to retrieve web page ...\n");
+                // publishProgress("Failed to retrieve web page ...\n");
                 publishProgress(e.getMessage());
 
             }
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
          * This takes the place of handlers and my makemsg method, since we can directly access the screen.
          */
         protected void onProgressUpdate(String... progress) {
-           // output.append(progress[0]);
+            // output.append(progress[0]);
         }
 
         /*

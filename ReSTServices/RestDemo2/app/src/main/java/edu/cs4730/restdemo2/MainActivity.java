@@ -3,7 +3,6 @@ package edu.cs4730.restdemo2;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         try {
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         }
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab =  findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         });
 
         //setup the RecyclerView
-        mRecyclerView = (RecyclerView) findViewById(R.id.list);
+        mRecyclerView = findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //setup the adapter, which is myAdapter, see the code.  set it initially to null
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
 
 
         //SwipeRefreshlayout setup.
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout =  findViewById(R.id.activity_main_swipe_refresh_layout);
         //setup some colors for the refresh circle.
         mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         //now setup the swiperefrestlayout listener where the main work is done.
@@ -232,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
     static final String kuser = "user1"; // your account name
     static final String kpass = "android"; // your password for the account
 
-    static class MyAuthenticator extends Authenticator {
+    private static class MyAuthenticator extends Authenticator {
         public PasswordAuthentication getPasswordAuthentication() {
             // I haven't checked getRequestingScheme() here, since for NTLM
             // and Negotiate, the usrname and password are all the same.
@@ -247,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
     * The data is constructed in the progress method and in the post the data is added to the
     * adapter for the recyclerview.
     */
-    class doNetwork extends AsyncTask<URI, String, String> {
+    private class doNetwork extends AsyncTask<URI, String, String> {
 
         /*
          * while this could have been in the doInBackground, I reused the
@@ -333,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
      * and toasts the return value.
      */
 
-    class doRest extends AsyncTask<myDataAsync, String, Integer> {
+    private class doRest extends AsyncTask<myDataAsync, String, Integer> {
 
         //how to write the parameters via a post method were used from here:
         //http://stackoverflow.com/questions/29536233/deprecated-http-classes-android-lollipop-5-1

@@ -12,19 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.Authenticator;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 
 import java.net.URL;
@@ -38,16 +32,16 @@ import java.util.ArrayList;
  * the adapter.
  */
 
-public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
+class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
 
     private int rowLayout;
     private Context mContext;
-    ArrayList<myObj> list = null;
-    PictureFragment myDialog;
-    FragmentManager fm;
-    Bitmap loading;
+    private ArrayList<myObj> list = null;
+    private PictureFragment myDialog;
+    private FragmentManager fm;
+    private Bitmap loading;
 
-    public myAdapter(ArrayList<myObj> mlist, int mrowLayout, Context context, FragmentManager mfm) {
+    myAdapter(ArrayList<myObj> mlist, int mrowLayout, Context context, FragmentManager mfm) {
         list = mlist;
         rowLayout = mrowLayout;
         mContext = context;
@@ -68,14 +62,12 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
         viewHolder.id = i;
         viewHolder.title.setText(list.get(i).title);
         viewHolder.pic.setImageBitmap(loading);
-        new getPic().execute(new myObjURL(list.get(i).piclocation,viewHolder));
+        new getPic().execute(new myObjURL(list.get(i).piclocation, viewHolder));
         viewHolder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myDialog.setpic((Bitmap)viewHolder.pic.getTag());
+                myDialog.setpic((Bitmap) viewHolder.pic.getTag());
                 myDialog.show(fm, null);
-
-//                Toast.makeText(mContext, "id is " + String.valueOf(viewHolder.id), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -87,35 +79,35 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
     }
 
     public void setData(ArrayList<myObj> l) {
-        list=l;
+        list = l;
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         public int id;
         public TextView title;
-        public ImageView pic;
-        public CardView cardview;
+        ImageView pic;
+        CardView cardview;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-            pic = (ImageView) itemView.findViewById(R.id.iv_pic);
-            title = (TextView) itemView.findViewById(R.id.tv_title);
-            cardview = (CardView) itemView.findViewById(R.id.cardview);
+            pic = itemView.findViewById(R.id.iv_pic);
+            title = itemView.findViewById(R.id.tv_title);
+            cardview = itemView.findViewById(R.id.cardview);
         }
     }
 
     //authenication code used from:
     //http://developer.android.com/reference/java/net/HttpURLConnection.html
     //and http://stackoverflow.com/questions/4883100/how-to-handle-http-authentication-using-httpurlconnection
-    static final String kuser = "user1"; // your account name
-    static final String kpass = "android"; // your password for the account
+    private static final String kuser = "user1"; // your account name
+    private static final String kpass = "android"; // your password for the account
 
     static class MyAuthenticator extends Authenticator {
         public PasswordAuthentication getPasswordAuthentication() {
             // I haven't checked getRequestingScheme() here, since for NTLM
             // and Negotiate, the usrname and password are all the same.
-           // System.err.println("Feeding username and password for " + getRequestingScheme());
+            // System.err.println("Feeding username and password for " + getRequestingScheme());
             return (new PasswordAuthentication(kuser, kpass.toCharArray()));
         }
     }
@@ -124,12 +116,14 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
     class myObjURL {
         String url;
         ViewHolder viewHolder;
+
         myObjURL(String url, ViewHolder viewHolder) {
             this.url = url;
             this.viewHolder = viewHolder;
         }
     }
-    class getPic extends AsyncTask<myObjURL, Bitmap, Bitmap> {
+
+    private class getPic extends AsyncTask<myObjURL, Bitmap, Bitmap> {
         ViewHolder viewHolder;
         String TAG = "getPic";
 
@@ -137,7 +131,7 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
         protected Bitmap doInBackground(myObjURL... params) {
             Bitmap bm = null;
             try {
-                viewHolder  = params[0].viewHolder;
+                viewHolder = params[0].viewHolder;
                 //setup password authentication
                 Authenticator.setDefault(new MyAuthenticator());
                 URL aURL = new URL(params[0].url);
@@ -155,7 +149,7 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
         }
 
         @Override
-        protected void onPostExecute(Bitmap bm){
+        protected void onPostExecute(Bitmap bm) {
             viewHolder.pic.setTag(bm);
             viewHolder.pic.setImageBitmap(bm);
         }
