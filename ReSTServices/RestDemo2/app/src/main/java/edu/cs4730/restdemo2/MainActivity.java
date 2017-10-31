@@ -146,9 +146,8 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
-
-
     }
+
 
     //help class to send all the data to the async task.  mostly because setting up all the
     //post data is just a pain in the but now.

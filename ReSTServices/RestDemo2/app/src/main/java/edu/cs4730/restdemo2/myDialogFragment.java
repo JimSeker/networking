@@ -1,13 +1,15 @@
 package edu.cs4730.restdemo2;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
 
@@ -28,7 +30,6 @@ public class myDialogFragment extends DialogFragment {
     private String mParam4;
 
     EditText mTitle, mBody;
-    Button mCancel, mSave;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -68,40 +69,37 @@ public class myDialogFragment extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
         // Inflate the layout for this fragment
-        View myView = inflater.inflate(R.layout.fragment_my_dialog, container, false);
+        View myView = inflater.inflate(R.layout.fragment_my_dialog, null);
 
         mTitle = myView.findViewById(R.id.et_title);
         mBody = myView.findViewById(R.id.et_body);
-        mCancel = myView.findViewById(R.id.btn_cancel);
-        mSave = myView.findViewById(R.id.btn_save);
         if (mParam1) { //true it's an update
             mTitle.setText(mParam3);
             mBody.setText(mParam4);
         }
-
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.Theme_AppCompat));
+        builder.setView(myView);
         //Save, Cancel
 
-        mCancel.setOnClickListener(new View.OnClickListener() {
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-
-        mSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void onClick(DialogInterface dialog, int id) {
                 if (mListener != null) {
                     mListener.onFragmentInteraction(mParam1, mParam2, mTitle.getText().toString(), mBody.getText().toString());
                 }
                 dismiss();
             }
-        });
-        return myView;
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dismiss();
+                }
+         }).setCancelable(true);
+        return builder.create();
     }
 
     @Override
@@ -118,7 +116,7 @@ public class myDialogFragment extends DialogFragment {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                + " must implement OnFragmentInteractionListener");
         }
     }
 
