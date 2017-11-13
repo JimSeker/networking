@@ -10,7 +10,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,8 +41,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         try {
-            uri = new URI("http://jsonplaceholder.typicode.com/posts");
+            uri = new URI("https://jsonplaceholder.typicode.com/posts");
         } catch (URISyntaxException e) {
+            Log.wtf(TAG,"error with uri");
             e.printStackTrace();
         }
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -96,12 +99,13 @@ public class MainActivity extends AppCompatActivity {
          * This downloads a text file and returns it to doInBackground.
          */
         //Simple class that takes an InputStream and return the data
-        //as a string, with line sepratorss (ie end of line markers)
+        //as a string, with line separators (ie end of line markers)
         private String readStream(InputStream in) {
             BufferedReader reader = null;
             StringBuilder sb = new StringBuilder("");
             String line = "";
             String NL = System.getProperty("line.separator");
+            //Log.wtf(TAG, "readstream started.");
             try {
                 reader = new BufferedReader(new InputStreamReader(in));
                 while ((line = reader.readLine()) != null) {
@@ -143,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
          * This takes the place of handlers and my makemsg method, since we can directly access the screen.
          */
         protected void onProgressUpdate(String... progress) {
-            // output.append(progress[0]);
+            Log.wtf(TAG, progress[0]);
         }
 
         /*
@@ -151,11 +155,14 @@ public class MainActivity extends AppCompatActivity {
          * to the screen.
          */
         protected void onPostExecute(String result) {
+            Log.wtf(TAG, "finished, updating result.");
+           // Log.wtf(TAG, "data: " + result);
             try {
                 list = new JSONArray(result);
                 mAdapter.setData(list);
             } catch (JSONException e) {
                 e.printStackTrace();
+                Toast.makeText(getBaseContext(), "Data response is empty", Toast.LENGTH_SHORT).show();
             }
             mSwipeRefreshLayout.setRefreshing(false);  //turn of the refresh.
         }
