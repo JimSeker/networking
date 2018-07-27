@@ -32,9 +32,9 @@ import android.widget.Toast;
  * http://stackoverflow.com/questions/7239996/android-downloadmanager-api-opening-file-after-download
  * http://blog.vogella.com/2011/06/14/android-downloadmanager-example/
  *
- *
- * Note, the notification does not working correctly in Oreo (API 26+.   It will notify when completed
- * but the ongoing no longer seems to work.  I can't find a place to put a channel id either.
+ *  newer tutorials that align with api 24+
+ * https://www.androidtutorialpoint.com/networking/android-download-manager-tutorial-download-file-using-download-manager-internet/
+ * http://www.gadgetsaint.com/android/download-manager/
  */
 
 
@@ -43,7 +43,10 @@ public class MainActivity extends AppCompatActivity {
     public static String id = "test_channel_01";
 
     //big file, takes about 30 seconds to download
-    String Download_path = "http://www.nasa.gov/images/content/206402main_jsc2007e113280_hires.jpg";
+    //String Download_path = "http://www.nasa.gov/images/content/206402main_jsc2007e113280_hires.jpg";
+    //String Download_filename = "nasa.jpg";
+    String Download_path = "https://www.androidtutorialpoint.com/wp-content/uploads/2016/09/AndroidDownloadManager.mp3";
+    String Download_filename = "AndroidDownloadManager.mp3";
     //smaller test file.
     //String Download_path = "http://www.cs.uwyo.edu/~seker/courses/2150/30mbHD.jpg";
     long download_id = -1;
@@ -98,10 +101,15 @@ public class MainActivity extends AppCompatActivity {
         DownloadManager.Request request = new DownloadManager.Request(Download_Uri)
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
             .setAllowedOverRoaming(false)
-            .setTitle("file nasa")
-            .setDescription("stuff ok.")
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)  //api 11 and above!
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "nasapic.jpg");
+            .setTitle(Download_filename)
+            .setDescription("Cool picture of the lander.")
+            .setVisibleInDownloadsUi(true)  //show up in system download manager list.
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            //notify only when completed.
+            //.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Download_filename);
+            //for inside the app space, use
+            //.setDestinationInExternalFilesDir(MainActivity.this, Environment.DIRECTORY_DOWNLOADS,Download_filename);
         download_id = downloadManager.enqueue(request);
     }
 
@@ -122,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             //.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
             //.setAllowedOverRoaming(true)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)  //api 11 and above!
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "nasapic.jpg");
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Download_filename);
         download_id = downloadManager.enqueue(request);
     }
 
