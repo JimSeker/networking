@@ -2,14 +2,14 @@ package edu.cs4730.restdemo1;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         try {
             uri = new URI("https://jsonplaceholder.typicode.com/posts");
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             Log.wtf(TAG,"error with uri");
             e.printStackTrace();
         }
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //setup the RecyclerView
-        mRecyclerView = (RecyclerView) findViewById(R.id.list);
+        mRecyclerView =  findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //setup the adapter, which is myAdapter, see the code.  set it initially to null
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //SwipeRefreshlayout setup.
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout =  findViewById(R.id.activity_main_swipe_refresh_layout);
         //setup some colors for the refresh circle.
         mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         //now setup the swiperefrestlayout listener where the main work is done.

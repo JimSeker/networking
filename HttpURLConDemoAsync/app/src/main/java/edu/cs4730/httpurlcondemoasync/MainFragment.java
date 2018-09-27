@@ -1,6 +1,7 @@
 package edu.cs4730.httpurlcondemoasync;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
+
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
@@ -18,7 +19,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-//Example using a Async task to get a web page.
+/**
+ * Example using a Async task to get a web page.
+ * <p>
+ * Note, https://koz.io/android-m-and-the-war-on-cleartext-traffic/
+ * In the AndroidManifest.xml there is < application ... android:usesCleartextTraffic="true" ...
+ * The test server doesn't have a legit cert, so... @#$@ it, cleartext it is.
+ * For real app, with legit certs on web servers, you should use https and remove the above.
+ */
 
 public class MainFragment extends Fragment implements Button.OnClickListener {
     TextView output;
@@ -32,9 +40,9 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
                              Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        output = (TextView) myView.findViewById(R.id.output);
+        output = myView.findViewById(R.id.output);
         output.append("\n");
-        mkconn = (Button) myView.findViewById(R.id.makeconn);
+        mkconn = myView.findViewById(R.id.makeconn);
         mkconn.setOnClickListener(this);
         return myView;
     }
@@ -54,8 +62,8 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
 
 
     /*
- * Shows how to use an AsyncTask with a HttpClient method.
- */
+     * Shows how to use an AsyncTask with a HttpClient method.
+     */
     class doNetwork extends AsyncTask<URI, String, String> {
 
         /*
@@ -128,11 +136,5 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         protected void onPostExecute(String result) {
             output.append(result);
         }
-
-
     }
-
-
-
-
 }

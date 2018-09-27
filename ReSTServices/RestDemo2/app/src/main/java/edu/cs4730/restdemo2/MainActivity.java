@@ -2,14 +2,14 @@ package edu.cs4730.restdemo2;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -47,6 +47,11 @@ import java.util.Map;
  * SECURITY NOTE:
  * https really should be used so the username and password are encrypted, but our website doesn't have a valid cert,
  * if yours does, change it to https://... * and HttpsURLconnection and everything else is the same.
+ *
+  *  Note, https://koz.io/android-m-and-the-war-on-cleartext-traffic/
+ * In the AndroidManifest.xml there is < application ... android:usesCleartextTraffic="true" ...
+ * The test server doesn't have a legit cert, so... @#$@ it, cleartext it is.
+ * For real app, with legit certs on web servers, you should use https and remove the above.
  */
 
 

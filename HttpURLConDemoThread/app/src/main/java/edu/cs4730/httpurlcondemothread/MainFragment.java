@@ -1,6 +1,7 @@
 package edu.cs4730.httpurlcondemothread;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +19,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * A placeholder fragment containing a simple view.
+ * This get a web page via the URL connection with a thread.
+ * <p>
+ * Note, https://koz.io/android-m-and-the-war-on-cleartext-traffic/
+ * In the AndroidManifest.xml there is < application ... android:usesCleartextTraffic="true" ...
+ * The test server doesn't have a legit cert, so... @#$@ it, cleartext it is.
+ * For real app, with legit certs on web servers, you should use https and remove the above.
  */
 public class MainFragment extends Fragment implements Button.OnClickListener {
     TextView output;
-    Button  mkconn;
+    Button mkconn;
 
     public MainFragment() {
     }
@@ -31,13 +37,14 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_main, container, false);
-        output = (TextView) myView.findViewById(R.id.output);
+        output = myView.findViewById(R.id.output);
         output.append("\n");
-        mkconn = (Button) myView.findViewById(R.id.makeconn);
+        mkconn = myView.findViewById(R.id.makeconn);
         mkconn.setOnClickListener(this);
 
         return myView;
     }
+
     @Override
     public void onClick(View v) {
         //anonymous thread created here to get the webpage
@@ -57,8 +64,8 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
     });
 
     /*
-* simple method to send messages to the handler.
- */
+     * simple method to send messages to the handler.
+     */
     public void mkmsg(String str) {
         //handler junk, because thread can't update screen!
         Message msg = new Message();
@@ -95,7 +102,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
     }
 
     //actual thread class that calls executeHpptGet() above.
-    class doNetwork  implements Runnable {
+    class doNetwork implements Runnable {
         public void run() {
             mkmsg("Attempting to retrieve web page ...\n");
             try {

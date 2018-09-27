@@ -4,7 +4,9 @@ package edu.cs4730.tcpclient;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
+
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +22,10 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-/*
+/**
  * this is a simple network client example.  Note it assumes you are using the emulators, but will work
  * on phones as well.  You just need to know the IP address.
- *
  */
-
 
 public class MainFragment extends Fragment implements Button.OnClickListener {
     TextView output;
@@ -33,28 +33,25 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
     EditText hostname, port;
     Thread myNet;
 
-
     public MainFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View myView = inflater.inflate(R.layout.fragment_main, container, false);
-        output = (TextView) myView.findViewById(R.id.output);
+        output = myView.findViewById(R.id.output);
         output.append("\n");
-        hostname = (EditText) myView.findViewById(R.id.EThostname);
+        hostname = myView.findViewById(R.id.EThostname);
         //hostname.setText("10.0.2.2"); //This address is the localhost for the computer the emulator is running on.
         hostname.setText("10.121.174.200");
-        port = (EditText) myView.findViewById(R.id.ETport);
-        mkconn = (Button) myView.findViewById(R.id.makeconn);
+        port = myView.findViewById(R.id.ETport);
+        mkconn = myView.findViewById(R.id.makeconn);
         mkconn.setOnClickListener(this);
         return myView;
     }
-
 
     @Override
     public void onClick(View v) {
@@ -96,8 +93,6 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         public BufferedReader in;
 
         public void run() {
-
-
             int p = Integer.parseInt(port.getText().toString());
             String h = hostname.getText().toString();
             mkmsg("host is " + h + "\n");
@@ -139,6 +134,4 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
             }
         }
     }
-
-
 }

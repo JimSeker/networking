@@ -5,7 +5,9 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
+
+import androidx.fragment.app.Fragment;
+
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,12 +25,14 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/* This a simple network server code.  The user must push the make connection button to setup the
-* server to accept connections.
-*
-* Note use adb forward tcp:3012 tcp:3012
-* to setup the emulator to receive.
-*/
+/**
+ * This a simple network server code.  The user must push the make connection button to setup the
+ * server to accept connections.
+ * <p>
+ * Note use adb forward tcp:3012 tcp:3012
+ * to setup the emulator to receive.
+ */
+
 public class MainFragment extends Fragment implements Button.OnClickListener {
     TextView output;
     Button mkconn;
@@ -40,7 +44,6 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
     public MainFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +60,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         WifiManager wm = (WifiManager) getActivity().getApplicationContext().getSystemService(Service.WIFI_SERVICE);
         //noinspection deprecation    wifi can't return a ipv6, which is what the issue is, formater doesn't support ipv6
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-        output.append("Server IP address is " + ip +"\n");
+        output.append("Server IP address is " + ip + "\n");
         return myView;
     }
 
@@ -109,12 +112,12 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
 
             try {
                 mkmsg("Waiting on Connecting...\n");
-                Log.v(TAG,"S: Connecting...");
+                Log.v(TAG, "S: Connecting...");
                 ServerSocket serverSocket = new ServerSocket(p);
 
                 //socket created, now wait for a coonection via accept.
                 Socket client = serverSocket.accept();
-                Log.v(TAG,"S: Receiving...");
+                Log.v(TAG, "S: Receiving...");
 
                 try {
                     //setup send/receive streams.
@@ -138,18 +141,14 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
 
                 } catch (Exception e) {
                     mkmsg("Error happened sending/receiving\n");
-
                 } finally {
                     mkmsg("We are done, closing connection\n");
                     client.close();  //close the client connection
                     serverSocket.close();  //finally close down the server side as well.
                 }
-
             } catch (Exception e) {
                 mkmsg("Unable to connect...\n");
             }
-
         }
     }
-
 }

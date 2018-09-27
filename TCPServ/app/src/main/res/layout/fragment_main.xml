@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="edu.cs4730.TCPserv.MainFragment">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="edu.cs4730.TCPserv.MainFragment">
 
     <TextView
         android:id="@+id/widget29"
@@ -47,10 +47,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:padding="10dp"
         android:focusableInTouchMode="true"
+        android:padding="10dp"
         android:text="  Accept Connection  ">
-        <requestFocus />
+
+        <requestFocus/>
     </Button>
 
     <ScrollView

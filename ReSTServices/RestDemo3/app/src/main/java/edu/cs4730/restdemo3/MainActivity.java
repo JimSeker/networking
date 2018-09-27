@@ -2,14 +2,14 @@ package edu.cs4730.restdemo3;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
@@ -23,6 +23,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * Note, https://koz.io/android-m-and-the-war-on-cleartext-traffic/
+ * In the AndroidManifest.xml there is < application ... android:usesCleartextTraffic="true" ...
+ * The test server doesn't have a legit cert, so... @#$@ it, cleartext it is.
+ * For real app, with legit certs on web servers, you should use https and remove the above.
+ */
 public class MainActivity extends AppCompatActivity {
     String TAG = "MainActivity";
     RecyclerView mRecyclerView;
@@ -34,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar =  findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -42,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                    .setAction("Action", null).show();
             }
         });
 
@@ -82,11 +88,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
     /*
- * Shows how to use an AsyncTask with a httpURLconnection method to query the REST service.
- */
+     * Shows how to use an AsyncTask with a httpURLconnection method to query the REST service.
+     */
     private class doNetwork extends AsyncTask<URL, String, String> {
         ArrayList<myObj> list = null;
+
         //Simple class that takes an InputStream and return the data
         //as a string, with line sepratorss (ie end of line markers)
         private String readStream(InputStream in) {
