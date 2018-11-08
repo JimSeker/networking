@@ -17,22 +17,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-/*
+/**
+ * This is a simple example of how to use the download manager.  except not really that simple anymore
+ * and in places is may not even work.
+ * <p>
  * http://developer.android.com/reference/android/app/DownloadManager.Request.html#setNotificationVisibility%28int%29
  * http://developer.android.com/reference/android/app/DownloadManager.html
  * http://sunil-android.blogspot.com/2013/01/pass-data-from-service-to-activity.html
  * http://stackoverflow.com/questions/7239996/android-downloadmanager-api-opening-file-after-download
  * http://blog.vogella.com/2011/06/14/android-downloadmanager-example/
- *
- *  newer tutorials that align with api 24+
+ * <p>
+ * newer tutorials that align with api 24+
  * https://www.androidtutorialpoint.com/networking/android-download-manager-tutorial-download-file-using-download-manager-internet/
  * http://www.gadgetsaint.com/android/download-manager/
  */
@@ -43,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
     public static String id = "test_channel_01";
 
     //big file, takes about 30 seconds to download
-    //String Download_path = "http://www.nasa.gov/images/content/206402main_jsc2007e113280_hires.jpg";
-    //String Download_filename = "nasa.jpg";
-    String Download_path = "https://www.androidtutorialpoint.com/wp-content/uploads/2016/09/AndroidDownloadManager.mp3";
-    String Download_filename = "AndroidDownloadManager.mp3";
+    String Download_path = "http://www.nasa.gov/images/content/206402main_jsc2007e113280_hires.jpg";
+    String Download_filename = "nasa.jpg";
+    //String Download_path = "https://www.androidtutorialpoint.com/wp-content/uploads/2016/09/AndroidDownloadManager.mp3";
+    //String Download_filename = "AndroidDownloadManager.mp3";
     //smaller test file.
     //String Download_path = "http://www.cs.uwyo.edu/~seker/courses/2150/30mbHD.jpg";
     long download_id = -1;
@@ -68,8 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 
-        Button btnDownload = (Button) findViewById(R.id.download);
-        btnDownload.setOnClickListener(new Button.OnClickListener() {
+        findViewById(R.id.download).setOnClickListener(new Button.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
@@ -85,14 +89,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        Button btnDownload2 = (Button) findViewById(R.id.download2);
-        btnDownload2.setOnClickListener(new Button.OnClickListener() {
-
+        findViewById(R.id.download2).setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 downloadfilenonoti();
             }
         });
+        createchannel();
     }
 
     void downloadfile() {
@@ -108,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
             //notify only when completed.
             //.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Download_filename);
-            //for inside the app space, use
-            //.setDestinationInExternalFilesDir(MainActivity.this, Environment.DIRECTORY_DOWNLOADS,Download_filename);
+        //for inside the app space, use
+        //.setDestinationInExternalFilesDir(MainActivity.this, Environment.DIRECTORY_DOWNLOADS,Download_filename);
         download_id = downloadManager.enqueue(request);
     }
 
@@ -127,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         //This should down the file without creating a notification.
         Uri Download_Uri = Uri.parse(Download_path);
         DownloadManager.Request request = new DownloadManager.Request(Download_Uri)
+            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
             //.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
             //.setAllowedOverRoaming(true)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)  //api 11 and above!
@@ -137,9 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-
         super.onResume();
-
         IntentFilter intentFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         registerReceiver(downloadReceiver, intentFilter);
     }
@@ -147,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         unregisterReceiver(downloadReceiver);
     }
 
@@ -240,14 +241,11 @@ public class MainActivity extends AppCompatActivity {
             }
             case REQUEST_PERM_ACCESS_nonoti: {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // write permission was granted, yay!  Now kick off the download manager.
                     downloadfilenonoti();
 
                 } else {
-
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                     Log.v(TAG, "write permissions not granted.");
@@ -258,10 +256,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*
-
+    /**
      * for API 26+ create notification channels
-  */
+     */
     private void createchannel() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -278,7 +275,6 @@ public class MainActivity extends AppCompatActivity {
             mChannel.setShowBadge(true);
             mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             nm.createNotificationChannel(mChannel);
-
         }
     }
 
