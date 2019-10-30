@@ -2,7 +2,9 @@ package edu.cs4730.httpurlcondemothread;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.security.NetworkSecurityPolicy;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +44,14 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         mkconn = myView.findViewById(R.id.makeconn);
         mkconn.setOnClickListener(this);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted()) {
+                output.append("Clear Text traffic is allowed.");
+            } else {
+                output.append("Clear Text traffic is NOT allowed.");
+            }
+        }
+
         return myView;
     }
 
@@ -63,7 +73,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
 
     });
 
-    /*
+    /**
      * simple method to send messages to the handler.
      */
     public void mkmsg(String str) {
@@ -76,7 +86,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
     }
 
     //Simple class that takes an InputStream and return the data
-    //as a string, with line sepratorss (ie end of line markers)
+    //as a string, with line separators (ie end of line markers)
     private String readStream(InputStream in) {
         BufferedReader reader = null;
         StringBuilder sb = new StringBuilder("");
@@ -101,7 +111,9 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         return sb.toString();
     }
 
-    //actual thread class that calls executeHpptGet() above.
+    /**
+     * actual thread class that calls executeHpptGet() above.
+     */
     class doNetwork implements Runnable {
         public void run() {
             mkmsg("Attempting to retrieve web page ...\n");

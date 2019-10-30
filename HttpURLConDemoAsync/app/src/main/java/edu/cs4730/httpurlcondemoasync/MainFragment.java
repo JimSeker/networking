@@ -2,8 +2,10 @@ package edu.cs4730.httpurlcondemoasync;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.AsyncTask;
+import android.security.NetworkSecurityPolicy;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,16 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         output.append("\n");
         mkconn = myView.findViewById(R.id.makeconn);
         mkconn.setOnClickListener(this);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted()) {
+                output.append("Clear Text traffic is allowed.");
+            } else {
+                output.append("Clear Text traffic is NOT allowed.");
+            }
+        }
+
         return myView;
     }
 
@@ -61,19 +73,19 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
     }
 
 
-    /*
+    /**
      * Shows how to use an AsyncTask with a HttpClient method.
      */
     class doNetwork extends AsyncTask<URI, String, String> {
 
-        /*
+        /**
          * while this could have been in the doInBackground, I reused the
          * method already created the thread class.
          *
          * This downloads a text file and returns it to doInBackground.
          */
         //Simple class that takes an InputStream and return the data
-        //as a string, with line sepratorss (ie end of line markers)
+        //as a string, with line separators (ie end of line markers)
         private String readStream(InputStream in) {
             BufferedReader reader = null;
             StringBuilder sb = new StringBuilder("");
@@ -122,14 +134,14 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
             return page;  //return the page downloaded.
         }
 
-        /*
+        /**
          * This takes the place of handlers and my makemsg method, since we can directly access the screen.
          */
         protected void onProgressUpdate(String... progress) {
             output.append(progress[0]);
         }
 
-        /*
+        /**
          * So the file has been downloaded and in this simple example it is displayed
          * to the screen.
          */
