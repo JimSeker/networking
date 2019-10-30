@@ -57,7 +57,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         mkconn.setOnClickListener(this);
 
         //What is our IP address?
-        WifiManager wm = (WifiManager) getActivity().getApplicationContext().getSystemService(Service.WIFI_SERVICE);
+        WifiManager wm = (WifiManager) getContext().getApplicationContext().getSystemService(Service.WIFI_SERVICE);
         //noinspection deprecation    wifi can't return a ipv6, which is what the issue is, formater doesn't support ipv6
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
         output.append("Server IP address is " + ip + "\n");
@@ -67,7 +67,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
-        public boolean handleMessage(Message msg) {
+        public boolean handleMessage(Message  msg) {
             output.append(msg.getData().getString("msg"));
             return true;
         }

@@ -45,21 +45,21 @@ public class MainFragment extends Fragment {
         browser.setWebViewClient(new CallBack());
 
         //how buttons from zoom and forward/back.
-        btnZoomIn = (Button) myView.findViewById(R.id.btnZoomIn);
+        btnZoomIn =  myView.findViewById(R.id.btnZoomIn);
         btnZoomIn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 browser.zoomIn();
             }
         });
-        btnZoomOut = (Button) myView.findViewById(R.id.btnZoomOut);
+        btnZoomOut = myView.findViewById(R.id.btnZoomOut);
         btnZoomOut.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 browser.zoomOut();
             }
         });
-        btnBack = (Button) myView.findViewById(R.id.btnBack);
+        btnBack = myView.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +68,7 @@ public class MainFragment extends Fragment {
                 }
             }
         });
-        btnForward = (Button) myView.findViewById(R.id.btnFoward);
+        btnForward =  myView.findViewById(R.id.btnFoward);
         btnForward.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,9 +86,9 @@ public class MainFragment extends Fragment {
      */
     private class CallBack extends WebViewClient {
 
-        //API 24+, so the lollipop check is just for studio to shutup about it.
+        //API 24+, so the N check is just for studio to shut up about it.
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 view.loadUrl(request.getUrl().toString());
             }
             return true;
