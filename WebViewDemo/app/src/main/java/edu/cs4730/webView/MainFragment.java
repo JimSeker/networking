@@ -38,7 +38,7 @@ public class MainFragment extends Fragment {
         browser = (WebView) myView.findViewById(R.id.webkit);
         browser.getSettings().setJavaScriptEnabled(true);
         browser.getSettings().setBuiltInZoomControls(true);
-        browser.loadUrl("http://www.cs.uwyo.edu/~seker/");  //see note about UW main page for why ~seker/
+        browser.loadUrl("https://www.cs.uwyo.edu/~seker/");  //see note about UW main page for why ~seker/
 
         //setup the callBack, so when the user clicks a link, we intercept it and kept everything
         //in the app.
