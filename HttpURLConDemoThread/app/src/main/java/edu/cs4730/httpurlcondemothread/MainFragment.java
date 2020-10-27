@@ -20,6 +20,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+
 /**
  * This get a web page via the URL connection with a thread.
  * <p>
@@ -44,12 +46,11 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         mkconn = myView.findViewById(R.id.makeconn);
         mkconn.setOnClickListener(this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted()) {
-                output.append("Clear Text traffic is allowed.");
-            } else {
-                output.append("Clear Text traffic is NOT allowed.");
-            }
+
+        if (NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted()) {
+            output.append("Clear Text traffic is allowed.\n");
+        } else {
+            output.append("Clear Text traffic is NOT allowed.\n");
         }
 
         return myView;
@@ -118,8 +119,13 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         public void run() {
             mkmsg("Attempting to retrieve web page ...\n");
             try {
-                URL url = new URL("http://www.cs.uwyo.edu/~seker/courses/4730/index.html");
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                //for http, uncomment these two lines and comment out the https lines.
+                //URL url = new URL("http://www.cs.uwyo.edu/~seker/courses/4730/");
+                //HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+                URL url = new URL("https://www.cs.uwyo.edu/~seker/courses/4730/");
+                HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+
                 mkmsg("Connection made, reading in page.\n");
                 String page = readStream(con.getInputStream());
                 mkmsg("Processed page:\n");

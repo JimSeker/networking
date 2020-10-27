@@ -9,6 +9,7 @@ import android.security.NetworkSecurityPolicy;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -20,6 +21,8 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Example using a Async task to get a web page.
@@ -48,12 +51,10 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         mkconn.setOnClickListener(this);
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted()) {
-                output.append("Clear Text traffic is allowed.");
-            } else {
-                output.append("Clear Text traffic is NOT allowed.");
-            }
+        if (NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted()) {
+            output.append("Clear Text traffic is allowed.\n");
+        } else {
+            output.append("Clear Text traffic is NOT allowed.\n");
         }
 
         return myView;
@@ -64,7 +65,9 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
     public void onClick(View v) {
         URI url1;
         try {  //try catch is for the URI, not the asynctask, but if URI fails, no point.
-            url1 = new URI("http://www.cs.uwyo.edu/~seker/courses/4730/index.html");
+            //url1 = new URI("http://www.cs.uwyo.edu/~seker/courses/4730/");   //not https!
+            url1 = new URI("https://www.cs.uwyo.edu/~seker/courses/4730/");
+           // url1 = new URI("https://www.google.com/");
             new doNetwork().execute(url1);
         } catch (URISyntaxException e) {
             output.append("URI method failed?!  ");
@@ -81,7 +84,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         /**
          * while this could have been in the doInBackground, I reused the
          * method already created the thread class.
-         *
+         * <p>
          * This downloads a text file and returns it to doInBackground.
          */
         //Simple class that takes an InputStream and return the data
@@ -119,13 +122,26 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
             try {
                 //URL url = new URL(params[0].toString()); //but next line is much better! convert directly.
                 URL url = params[0].toURL();
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                publishProgress("Connection made, reading in page.\n");
-                page = readStream(con.getInputStream());
-                publishProgress("Processed page:\n");
-                publishProgress(page);
-                publishProgress("Finished\n");
-                con.disconnect();
+                publishProgress("address: "+ url.toString()+ "\n");
+                if (URLUtil.isHttpsUrl(url.toString()) ){
+                    HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+                    publishProgress("Connection made, reading in page.\n");
+                    page = readStream(con.getInputStream());
+                    publishProgress("Processed page:\n");
+                    publishProgress(page);
+                    publishProgress("Finished\n");
+                    con.disconnect();
+                } else {
+                    //for HTTP, not https
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    publishProgress("Connection made, reading in page.\n");
+                    page = readStream(con.getInputStream());
+                    publishProgress("Processed page:\n");
+                    publishProgress(page);
+                    publishProgress("Finished\n");
+                    con.disconnect();
+                }
+
             } catch (Exception e) {
                 publishProgress("Failed to retrieve web page ...\n");
                 publishProgress(e.getMessage());
