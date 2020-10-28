@@ -45,8 +45,11 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         output = myView.findViewById(R.id.output);
         output.append("\n");
         hostname = myView.findViewById(R.id.EThostname);
-        //hostname.setText("10.0.2.2"); //This address is the localhost for the computer the emulator is running on.
-        hostname.setText("10.121.174.200");
+        //This address is the localhost for the computer the emulator is running on.  If you are running
+        //tcpserv in another emulator on the same machine, use this address
+        hostname.setText("10.0.2.2");
+        //This would be more running on the another phone or different host and likely not this ip address either.
+        //hostname.setText("10.121.174.200");
         port = myView.findViewById(R.id.ETport);
         mkconn = myView.findViewById(R.id.makeconn);
         mkconn.setOnClickListener(this);

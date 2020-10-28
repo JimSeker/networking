@@ -148,6 +148,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
                 }
             } catch (Exception e) {
                 mkmsg("Unable to connect...\n");
+                e.printStackTrace();
             }
         }
     }
