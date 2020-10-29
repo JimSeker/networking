@@ -2,14 +2,17 @@ package edu.cs4730.restdemo3;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
 import android.view.View;
 
@@ -138,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 con.disconnect();
             } catch (Exception e) {
                 // publishProgress("Failed to retrieve web page ...\n");
+                e.printStackTrace();
                 publishProgress(e.getMessage());
 
             }
@@ -152,10 +156,13 @@ public class MainActivity extends AppCompatActivity {
             // output.append(progress[0]);
             //Log.v("progress", progress[0]);
             try {
-                String parts[] = progress[0].split(",");
-                //Log.v("done", parts[0] + " " + parts[1] + " " + parts[2]);
-                list.add(new myObj(Integer.valueOf(parts[0]), parts[1], parts[2]));
-
+                String[] parts = progress[0].split(",");
+                if (parts.length >= 2) {
+                    Log.v("done", parts[0] + " " + parts[1] + " " + parts[2]);
+                    list.add(new myObj(Integer.valueOf(parts[0]), parts[1], parts[2]));
+                } else {
+                    Log.wtf(TAG, "split failed, " + progress[0]);
+                }
             } catch (Exception e) {
                 Log.v("donetwork", "Error line: " + progress[0]);
                 e.printStackTrace();

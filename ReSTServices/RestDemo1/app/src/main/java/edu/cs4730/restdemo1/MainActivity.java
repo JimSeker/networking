@@ -2,14 +2,17 @@ package edu.cs4730.restdemo1;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             uri = new URI("https://jsonplaceholder.typicode.com/posts");
         } catch (URISyntaxException e) {
-            Log.wtf(TAG,"error with uri");
+            Log.wtf(TAG, "error with uri");
             e.printStackTrace();
         }
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -51,13 +54,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                    .setAction("Action", null).show();
             }
         });
 
 
         //setup the RecyclerView
-        mRecyclerView =  findViewById(R.id.list);
+        mRecyclerView = findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //setup the adapter, which is myAdapter, see the code.  set it initially to null
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //SwipeRefreshlayout setup.
-        mSwipeRefreshLayout =  findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout = findViewById(R.id.activity_main_swipe_refresh_layout);
         //setup some colors for the refresh circle.
         mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         //now setup the swiperefrestlayout listener where the main work is done.
@@ -88,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*
-    * Shows how to use an AsyncTask with a HttpClient method.
-    */
+     * Shows how to use an AsyncTask with a HttpClient method.
+     */
     private class doNetwork extends AsyncTask<URI, String, String> {
 
         /*
@@ -156,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
          */
         protected void onPostExecute(String result) {
             Log.wtf(TAG, "finished, updating result.");
-           // Log.wtf(TAG, "data: " + result);
+            // Log.wtf(TAG, "data: " + result);
             try {
                 list = new JSONArray(result);
                 mAdapter.setData(list);
