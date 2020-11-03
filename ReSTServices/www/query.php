@@ -10,13 +10,13 @@ if($id == "") {
    $sql = 'SELECT id,title,body FROM restdata WHERE id='.$id;
 }
 
-$result = mysql_query($sql);
-while($ary = mysql_fetch_array($result)) {
+$result = mysqli_query($link_id, $sql);
+while($ary = mysqli_fetch_array($result)) {
   $id = stripslashes($ary["id"]);
   $title = stripslashes($ary["title"]);
   $body = stripslashes($ary["body"]);
   echo "$id,$title,$body\n";
 }
- mysql_close($link_id);
+ mysqli_close($link_id);
 
 ?>

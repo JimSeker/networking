@@ -9,14 +9,14 @@ $body = addslashes($_REQUEST['body']);
 
 
 if($title != "" and $body != "") {
-   $sql = "INSERT into restdata (title, body) values";
+   $sql = "INSERT into restdata (title, body) values ";
    $sql .= "('$title','$body')";
-   //echo "$sql\n";
-   $result = mysql_query($sql);
-  echo mysql_affected_rows($link_id);
+   echo "$sql\n";
+   $result = mysqli_query($link_id, $sql) or die(mysql_error());
+  echo mysqli_affected_rows($link_id);
 } else {
   echo 0;
 }
- mysql_close($link_id);
+ mysqli_close($link_id);
  
 ?>

@@ -14,12 +14,12 @@ if($title != "" and $body != "" and $id != "") {
       $sql .= "body = '$body'";
       $sql .= " WHERE id = $id";
 
-//   echo "$sql\n";
-   $result = mysql_query($sql);
-  echo mysql_affected_rows($link_id);
+   echo "$sql\n";
+   $result = mysqli_query($link_id,$sql);
+  echo mysqli_affected_rows($link_id);
 } else {
   echo 0;
 }
- mysql_close($link_id);
+ mysqli_close($link_id);
  
 ?>
