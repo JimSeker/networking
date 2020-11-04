@@ -1,8 +1,9 @@
 package edu.cs4730.webView;
 
-import android.os.Build;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import android.widget.Button;
 
 /**
  * A simple example that shows how to use the webview widget in an app.
- *
+ * 
  * Added the safe browsing meta tag to the manifest.  no page to test with so I don't actually know if it works.
  *
  * A note, not all mobile pages allow zooming by default, UW's main page doesn't.  Then again, their web programmers are dumbasses too.  Look at their pages source code, dead obvious.
@@ -45,7 +46,7 @@ public class MainFragment extends Fragment {
         browser.setWebViewClient(new CallBack());
 
         //how buttons from zoom and forward/back.
-        btnZoomIn =  myView.findViewById(R.id.btnZoomIn);
+        btnZoomIn = myView.findViewById(R.id.btnZoomIn);
         btnZoomIn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +69,7 @@ public class MainFragment extends Fragment {
                 }
             }
         });
-        btnForward =  myView.findViewById(R.id.btnFoward);
+        btnForward = myView.findViewById(R.id.btnFoward);
         btnForward.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,24 +82,16 @@ public class MainFragment extends Fragment {
         return myView;
     }
 
-    /*
+    /**
      * This is override, so i can intercept when a user clicks a link, so it won't leave the app.
      */
     private class CallBack extends WebViewClient {
 
         //API 24+, so the N check is just for studio to shut up about it.
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                view.loadUrl(request.getUrl().toString());
-            }
+            view.loadUrl(request.getUrl().toString());
             return true;
         }
 
-        //deprecated in API 24
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
-            browser.loadUrl(url);
-            return true;
-        }
     }
 }

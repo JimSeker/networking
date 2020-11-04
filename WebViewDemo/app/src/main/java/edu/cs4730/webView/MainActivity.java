@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*
+    /**
      * This is intercepting the back key and then using it to go back in the browser pages
      * if there is a previous.  See mainFragment for more information.
      */
