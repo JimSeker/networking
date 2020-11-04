@@ -107,10 +107,12 @@ public class MainActivity extends AppCompatActivity {
             .setTitle(Download_filename)
             .setDescription("Cool picture of the lander.")
             .setVisibleInDownloadsUi(true)  //show up in system download manager list.
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            //notify only when completed.
-            //.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
+            //only when completed.
+            //.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            //notify while and during, I think.
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Download_filename);
+            request.allowScanningByMediaScanner();
         //for inside the app space, use
         //.setDestinationInExternalFilesDir(MainActivity.this, Environment.DIRECTORY_DOWNLOADS,Download_filename);
         download_id = downloadManager.enqueue(request);
@@ -135,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
             //.setAllowedOverRoaming(true)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)  //api 11 and above!
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Download_filename);
+        request.allowScanningByMediaScanner();
         download_id = downloadManager.enqueue(request);
     }
 
