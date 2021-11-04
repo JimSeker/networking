@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 String[] parts = progress[0].split(",");
                 if (parts.length >= 2) {
                     Log.v("done", parts[0] + " " + parts[1] + " " + parts[2]);
-                    list.add(new myObj(Integer.valueOf(parts[0]), parts[1], parts[2]));
+                    list.add(new myObj(Integer.parseInt(parts[0]), parts[1], parts[2]));
                 } else {
                     Log.wtf(TAG, "split failed, " + progress[0]);
                 }

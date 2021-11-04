@@ -2,7 +2,6 @@ package edu.cs4730.httpurlcondemothread;
 
 import androidx.fragment.app.Fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.security.NetworkSecurityPolicy;
 import android.view.LayoutInflater;
@@ -96,7 +95,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         try {
             reader = new BufferedReader(new InputStreamReader(in));
             while ((line = reader.readLine()) != null) {
-                sb.append(line + NL);
+                sb.append(line).append(NL);
             }
         } catch (IOException e) {
             e.printStackTrace();

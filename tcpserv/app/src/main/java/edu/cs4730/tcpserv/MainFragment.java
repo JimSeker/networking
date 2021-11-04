@@ -57,7 +57,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
         mkconn.setOnClickListener(this);
 
         //What is our IP address?
-        WifiManager wm = (WifiManager) getContext().getApplicationContext().getSystemService(Service.WIFI_SERVICE);
+        WifiManager wm = (WifiManager) requireContext().getSystemService(Service.WIFI_SERVICE);
         //noinspection deprecation    wifi can't return a ipv6, which is what the issue is, formater doesn't support ipv6
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
         output.append("Server IP address is " + ip + "\n");
@@ -76,7 +76,7 @@ public class MainFragment extends Fragment implements Button.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        //this way creates the thread annonymously.  quick and dirty, but generally a bad idea.
+        //this way creates the thread anonymously.  quick and dirty, but generally a bad idea.
         //new Thread(new doNetwork()).start();
 
         //better way is this way, where we have access to the thread variable.

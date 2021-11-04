@@ -33,6 +33,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
 
                 if (direction == ItemTouchHelper.RIGHT) {
                     //user wants to delet this entry.
-                    int item = Integer.valueOf(((myAdapter.ViewHolder) viewHolder).tvID.getText().toString());
+                    int item = Integer.parseInt(((myAdapter.ViewHolder) viewHolder).tvID.getText().toString());
                     try {
                         //run async task to delete this data item.
                         new doRest().execute(new myDataAsync(new URI("http://www.cs.uwyo.edu/~seker/rest/delete.php"),
@@ -274,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
                 reader = new BufferedReader(new InputStreamReader(in));
                 while ((line = reader.readLine()) != null) {
                     publishProgress(line);  //create the data structure as we go.
-                    sb.append(line + NL);
+                    sb.append(line).append(NL);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -317,8 +318,8 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         protected void onProgressUpdate(String... progress) {
             //build the data structure as we go.
             try {
-                String parts[] = progress[0].split(",");
-                list.add(new myObj(Integer.valueOf(parts[0]), parts[1], parts[2]));
+                String[] parts = progress[0].split(",");
+                list.add(new myObj(Integer.parseInt(parts[0]), parts[1], parts[2]));
             } catch (Exception e) {
                 Log.v("donetwork", "Error line: " + progress[0]);
             }
@@ -361,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
                 con.setDoOutput(true);
                 OutputStream os = con.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
+                    new OutputStreamWriter(os, StandardCharsets.UTF_8));
                 writer.write(params[0].data);
                 writer.flush();
                 writer.close();
@@ -369,19 +370,19 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
 
                 //get the response code (ie success 200 or something else
                 int responseCode = con.getResponseCode();
-                String response = "";
+                StringBuilder response = new StringBuilder();
                 //the return is a single number, so simple to read like this:
                 //note the while loop should not be necessary, but just in case.
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     String line;
                     BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     while ((line = br.readLine()) != null) {
-                        response += line;
+                        response.append(line);
                     }
                 } else
-                    response = "0";
+                    response = new StringBuilder("0");
 
-                return Integer.valueOf(response);
+                return Integer.valueOf(response.toString());
             } catch (Exception e) {
                 // failure of some kind.  uncomment the stacktrace to see what happened if it is
                 // permit error.
