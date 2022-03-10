@@ -1,6 +1,7 @@
 package edu.cs4730.downloaddemo;
 
 import java.io.FileNotFoundException;
+import java.util.Map;
 
 import android.Manifest;
 import android.app.NotificationChannel;
@@ -8,6 +9,7 @@ import android.app.NotificationManager;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
@@ -18,13 +20,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -60,8 +67,12 @@ public class MainActivity extends AppCompatActivity {
     DownloadManager downloadManager;
 
     String TAG = "MainActivity";
-    public static final int REQUEST_PERM_ACCESS_noti = 1;
-    public static final int REQUEST_PERM_ACCESS_nonoti = 2;
+    TextView logger;
+
+    //   public static final int REQUEST_PERM_ACCESS_nonoti = 2;
+
+    ActivityResultLauncher<String[]> rpl;
+    private String[] REQUIRED_PERMISSIONS;
 
     /**
      * Called when the activity is first created.
@@ -71,22 +82,37 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {  //For API 29+ (q), for 26 to 28.
+            REQUIRED_PERMISSIONS = new String[]{"android.permission.ACCESS_MEDIA_LOCATION"};
+        } else {
+            REQUIRED_PERMISSIONS = new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"};
+        }
+        logger = findViewById(R.id.logger);
+
+        //Use this to check permissions.
+        rpl = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
+            new ActivityResultCallback<Map<String, Boolean>>() {
+                @Override
+                public void onActivityResult(Map<String, Boolean> isGranted) {
+                    if (allPermissionsGranted()) {
+                        for (Map.Entry<String, Boolean> x : isGranted.entrySet())
+                            logthis(x.getKey() + " is " + x.getValue());
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Permissions not granted by the user.", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            }
+        );
+
         downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 
         findViewById(R.id.download).setOnClickListener(new Button.OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    //I'm on not explaining why, just asking for permission.
-                    Log.v(TAG, "asking for permissions");
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        MainActivity.REQUEST_PERM_ACCESS_noti);
 
-                } else {
-                    Log.v(TAG, "already have permissions");
-                    downloadfile();
-                }
+                downloadfile();
+
             }
         });
         findViewById(R.id.download2).setOnClickListener(new Button.OnClickListener() {
@@ -99,6 +125,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void downloadfile() {
+        if (!allPermissionsGranted()) {
+            rpl.launch(REQUIRED_PERMISSIONS);
+            return;
+        }
+
         //setup download and how it will look on the notification bar.
         Uri Download_Uri = Uri.parse(Download_path);
         DownloadManager.Request request = new DownloadManager.Request(Download_Uri)
@@ -112,23 +143,17 @@ public class MainActivity extends AppCompatActivity {
             //notify while and during, I think.
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Download_filename);
-            request.allowScanningByMediaScanner();
+        request.allowScanningByMediaScanner();
         //for inside the app space, use
         //.setDestinationInExternalFilesDir(MainActivity.this, Environment.DIRECTORY_DOWNLOADS,Download_filename);
         download_id = downloadManager.enqueue(request);
     }
 
     void downloadfilenonoti() {
-
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            //I'm on not explaining why, just asking for permission.
-            Log.v(TAG, "asking for permissions");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                MainActivity.REQUEST_PERM_ACCESS_nonoti);
+        if (!allPermissionsGranted()) {
+            rpl.launch(REQUIRED_PERMISSIONS);
             return;
         }
-        Log.v(TAG, "already have permissions");
-
         //This should down the file without creating a notification.
         Uri Download_Uri = Uri.parse(Download_path);
         DownloadManager.Request request = new DownloadManager.Request(Download_Uri)
@@ -164,8 +189,7 @@ public class MainActivity extends AppCompatActivity {
             if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
                 Bundle extras = intent.getExtras();
                 intentdownloadId = extras.getLong(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                Toast.makeText(MainActivity.this, "should match: id is " + download_id + " int_id is " + intentdownloadId,
-                    Toast.LENGTH_LONG).show();
+                logthis("should match: id is " + download_id + " int_id is " + intentdownloadId);
             }
 
             DownloadManager.Query query = new DownloadManager.Query();
@@ -187,75 +211,36 @@ public class MainActivity extends AppCompatActivity {
                 if (status == DownloadManager.STATUS_SUCCESSFUL) {
                     try {
                         ParcelFileDescriptor file = downloadManager.openDownloadedFile(intentdownloadId);
-                        Toast.makeText(MainActivity.this,
-                            "File Downloaded: " + Fname + " and ready to process",
-                            Toast.LENGTH_LONG).show();
+                        //Toast.makeText(MainActivity.this, "File Downloaded: " + Fname + " and ready to process", Toast.LENGTH_LONG).show();
+                        logthis("File Downloaded: " + Fname + " and ready to process");
                     } catch (FileNotFoundException e) {
-
                         e.printStackTrace();
-                        Toast.makeText(MainActivity.this,
-                            e.toString(),
-                            Toast.LENGTH_LONG).show();
+                        //Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
                     }
 
                 } else if (status == DownloadManager.STATUS_FAILED) {
-                    Toast.makeText(MainActivity.this,
-                        "FAILED!\n" + "reason of " + reason,
-                        Toast.LENGTH_LONG).show();
+                   // Toast.makeText(MainActivity.this,"FAILED!\n" + "reason of " + reason,  Toast.LENGTH_LONG).show();
+                    logthis("FAILED!\n" + "reason of " + reason);
                 } else if (status == DownloadManager.STATUS_PAUSED) {
-                    Toast.makeText(MainActivity.this,
-                        "PAUSED!\n" + "reason of " + reason,
-                        Toast.LENGTH_LONG).show();
+                   // Toast.makeText(MainActivity.this,"PAUSED!\n" + "reason of " + reason,  Toast.LENGTH_LONG).show();
+                    logthis("PAUSED!\n" + "reason of " + reason);
                 } else if (status == DownloadManager.STATUS_PENDING) {
-                    Toast.makeText(MainActivity.this,
-                        "PENDING!",
-                        Toast.LENGTH_LONG).show();
+                   // Toast.makeText(MainActivity.this,"PENDING!", Toast.LENGTH_LONG).show();
+                    logthis("PENDING!");
                 } else if (status == DownloadManager.STATUS_RUNNING) {
-                    Toast.makeText(MainActivity.this,
-                        "RUNNING!",
-                        Toast.LENGTH_LONG).show();
+                   // Toast.makeText(MainActivity.this,"RUNNING!", Toast.LENGTH_LONG).show();
+                    logthis("RUNNING!");
                 }
             }
         }
 
     };
 
-
-    //handle the response.
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_PERM_ACCESS_noti: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // write permission was granted, yay!  Now kick off the download manager.
-                    downloadfile();
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Log.v(TAG, "write permissions not granted.");
-                }
-                return;
-            }
-            case REQUEST_PERM_ACCESS_nonoti: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // write permission was granted, yay!  Now kick off the download manager.
-                    downloadfilenonoti();
-
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Log.v(TAG, "write permissions not granted.");
-                }
-            }
-            // other 'case' lines to check for other
-            // permissions this app might request
+    public void logthis(String item) {
+        if (!item.equals("")) {
+            logger.append(item + "\n");
+            Log.w(TAG, item);
         }
     }
 
@@ -263,23 +248,31 @@ public class MainActivity extends AppCompatActivity {
      * for API 26+ create notification channels
      */
     private void createchannel() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationChannel mChannel = new NotificationChannel(id,
-                getString(R.string.channel_name),  //name of the channel
-                NotificationManager.IMPORTANCE_DEFAULT);   //importance level
-            //important level: default is is high on the phone.  high is urgent on the phone.  low is medium, so none is low?
-            // Configure the notification channel.
-            mChannel.setDescription(getString(R.string.channel_description));
-            mChannel.enableLights(true);
-            //Sets the notification light color for notifications posted to this channel, if the device supports this feature.
-            mChannel.setLightColor(Color.RED);
-            mChannel.enableVibration(true);
-            mChannel.setShowBadge(true);
-            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-            nm.createNotificationChannel(mChannel);
-        }
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel mChannel = new NotificationChannel(id,
+            getString(R.string.channel_name),  //name of the channel
+            NotificationManager.IMPORTANCE_DEFAULT);   //importance level
+        //important level: default is is high on the phone.  high is urgent on the phone.  low is medium, so none is low?
+        // Configure the notification channel.
+        mChannel.setDescription(getString(R.string.channel_description));
+        mChannel.enableLights(true);
+        //Sets the notification light color for notifications posted to this channel, if the device supports this feature.
+        mChannel.setLightColor(Color.RED);
+        mChannel.enableVibration(true);
+        mChannel.setShowBadge(true);
+        mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+        nm.createNotificationChannel(mChannel);
     }
 
-
+    /**
+     * This a helper method to check for the permissions.
+     */
+    private boolean allPermissionsGranted() {
+        for (String permission : REQUIRED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
