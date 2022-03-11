@@ -127,10 +127,11 @@ public class MainActivity extends AppCompatActivity {
             .setTitle(Download_filename)
             .setDescription("Video")
             .setVisibleInDownloadsUi(true)  //show up in system download manager list.
-            //only when completed.
+            //show while downloading, and completed.  but doesn't appear while downloading.  may just be broken at this point.
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            //only when completed.
             //.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
-            //This one doesn't work or something about my notificaiton setup is wrong.  IDK.
+            //visual, but not competed.  note, while running appears to be broken.  it doesn't show.
             //.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Download_filename);
         request.allowScanningByMediaScanner();
@@ -144,8 +145,9 @@ public class MainActivity extends AppCompatActivity {
             rpl.launch(REQUIRED_PERMISSIONS);
             return;
         }
-        //This should down the file without creating a notification.
+        //This should down the file without creating a notification.  if you don't have permission (in manifest) it will crash.
         Uri Download_Uri = Uri.parse(Download_path);
+
         DownloadManager.Request request = new DownloadManager.Request(Download_Uri)
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
             //.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
