@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     //for the channel id notification.
     public static String id = "test_channel_01";
 
+    //String Download_path ="https://sample-videos.com/img/Sample-jpg-image-30mb.jpg";  //even bigger file.  no notification until completed.
     //big file, takes about 30 seconds to download
     String Download_path = "http://www.learningcontainer.com/wp-content/uploads/2020/07/Large-Sample-Image-download-for-Testing.jpg";
     String Download_filename = "extrlargesample.jpg";
