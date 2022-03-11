@@ -35,18 +35,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * This is a simple example of how to use the download manager.  except not really that simple anymore
- * and in places is may not even work.
- * <p>
- * http://developer.android.com/reference/android/app/DownloadManager.Request.html#setNotificationVisibility%28int%29
- * http://developer.android.com/reference/android/app/DownloadManager.html
- * http://sunil-android.blogspot.com/2013/01/pass-data-from-service-to-activity.html
- * http://stackoverflow.com/questions/7239996/android-downloadmanager-api-opening-file-after-download
- * http://blog.vogella.com/2011/06/14/android-downloadmanager-example/
- * <p>
- * newer tutorials that align with api 24+
- * https://www.androidtutorialpoint.com/networking/android-download-manager-tutorial-download-file-using-download-manager-internet/
- * http://www.gadgetsaint.com/android/download-manager/
+ * This is a simple example of how to use the download manager.  except not really that simple anymore with all permissions needed.
+ * Also I need a much larger file, even 15MB is just to quick.  I don't seem to be able to get an on going notification anymore.
+ * using https://www.learningcontainer.com/sample-jpeg-file-download-for-testing/
  */
 
 
@@ -55,12 +46,12 @@ public class MainActivity extends AppCompatActivity {
     public static String id = "test_channel_01";
 
     //big file, takes about 30 seconds to download
-    String Download_path = "http://www.nasa.gov/images/content/206402main_jsc2007e113280_hires.jpg";
-    String Download_filename = "nasa.jpg";
-    //String Download_path = "https://www.androidtutorialpoint.com/wp-content/uploads/2016/09/AndroidDownloadManager.mp3";
-    //String Download_filename = "AndroidDownloadManager.mp3";
+    String Download_path = "http://www.learningcontainer.com/wp-content/uploads/2020/07/Large-Sample-Image-download-for-Testing.jpg";
+    String Download_filename = "extrlargesample.jpg";
+
     //smaller test file.
     //String Download_path = "http://www.cs.uwyo.edu/~seker/courses/2150/30mbHD.jpg";
+    //String Download_filename = "30mbHD.jpg";
     long download_id = -1;
 
     //SharedPreferences preferenceManager;
@@ -68,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
     String TAG = "MainActivity";
     TextView logger;
-
-    //   public static final int REQUEST_PERM_ACCESS_nonoti = 2;
 
     ActivityResultLauncher<String[]> rpl;
     private String[] REQUIRED_PERMISSIONS;
@@ -136,12 +125,13 @@ public class MainActivity extends AppCompatActivity {
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
             .setAllowedOverRoaming(false)
             .setTitle(Download_filename)
-            .setDescription("Cool picture of the lander.")
+            .setDescription("Video")
             .setVisibleInDownloadsUi(true)  //show up in system download manager list.
             //only when completed.
-            //.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            //notify while and during, I think.
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            //.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
+            //This one doesn't work or something about my notificaiton setup is wrong.  IDK.
+            //.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Download_filename);
         request.allowScanningByMediaScanner();
         //for inside the app space, use
