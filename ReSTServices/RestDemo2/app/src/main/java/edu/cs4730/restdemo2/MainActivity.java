@@ -1,7 +1,5 @@
 package edu.cs4730.restdemo2;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -14,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
 
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -142,9 +141,9 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
                     //user wants to delet this entry.
                     int item = Integer.parseInt(((myAdapter.ViewHolder) viewHolder).tvID.getText().toString());
                     try {
-                        //run async task to delete this data item.
-                        new doRest().execute(new myDataAsync(new URI("http://www.cs.uwyo.edu/~seker/rest/delete.php"),
-                            false, item, "", ""));
+                        //run thread task to delete this data item.
+                        new Thread(new doRest(new myDataAsync(new URI("http://www.cs.uwyo.edu/~seker/rest/delete.php"),
+                            false, item, "", ""))).start();
 
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
@@ -206,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         mSwipeRefreshLayout.setRefreshing(true);
         //call the refresh code manually here.
         list = new ArrayList<myObj>();  //set the list.
-        new doNetwork().execute(uri);
+        new Thread(new doNetwork(uri)).start();
     }
 
     //fragment listener for update/add for myDialogFragment
@@ -232,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
                 e.printStackTrace();
             }
         }
-        new doRest().execute(new myDataAsync(localuri, update, id, title, body));
+        new Thread(new doRest(new myDataAsync(localuri, update, id, title, body))).start();
     }
 
     //authenication code used from:
@@ -251,19 +250,20 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
     }
 
 
-    /*
-     * uses an AsyncTask with a httpURLConnection method to query the REST service.
+    /**
+     * uses an thread with a httpURLConnection method to query the REST service.
      * The data is constructed in the progress method and in the post the data is added to the
      * adapter for the recyclerview.
+     * Note this was an aysnctask, which I just made back into a thread, but kept method names.
      */
-    private class doNetwork extends AsyncTask<URI, String, String> {
+    private class doNetwork implements Runnable {
 
-        /*
-         * while this could have been in the doInBackground, I reused the
-         * method already created the thread class.
-         *
-         * This downloads a text file and returns it to doInBackground.
-         */
+        URI myUri;
+
+        doNetwork(URI uri) {
+            myUri = uri;
+        }
+
         //Simple class that takes an InputStream and return the data
         //as a string, with line separators (ie end of line markers)
         private String readStream(InputStream in) {
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
             try {
                 reader = new BufferedReader(new InputStreamReader(in));
                 while ((line = reader.readLine()) != null) {
-                    publishProgress(line);  //create the data structure as we go.
+                    onProgressUpdate(line);  //create the data structure as we go.
                     sb.append(line).append(NL);
                 }
             } catch (IOException e) {
@@ -291,69 +291,74 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
             return sb.toString();
         }
 
-
-        @Override
-        protected String doInBackground(URI... params) {
+        public void run() {
             String page = "";
             try {
                 //setup password authentication
                 Authenticator.setDefault(new MyAuthenticator());
                 //URL url = new URL(params[0].toString()); //but next line is much better! convert directly.
-                URL url = params[0].toURL();
+                URL url = myUri.toURL();
 
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 page = readStream(con.getInputStream());
                 con.disconnect();
             } catch (Exception e) {
                 // publishProgress("Failed to retrieve web page ...\n");
-                publishProgress(e.getMessage());
+                e.printStackTrace();
 
             }
-            return page;  //return the page downloaded.
+            onPostExecute( page);  //return the page downloaded.
         }
 
-        /*
-         * build the data structure.
-         */
-        protected void onProgressUpdate(String... progress) {
+        private void onProgressUpdate(String progress) {
             //build the data structure as we go.
-            try {
-                String[] parts = progress[0].split(",");
-                list.add(new myObj(Integer.parseInt(parts[0]), parts[1], parts[2]));
-            } catch (Exception e) {
-                Log.v("donetwork", "Error line: " + progress[0]);
-            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String[] parts = progress.split(",");
+                    list.add(new myObj(Integer.parseInt(parts[0]), parts[1], parts[2]));
+                }
+            });
         }
 
         /*
          * finished, new set the adapter with the data and turn off the refresh.
          */
-        protected void onPostExecute(String result) {
+        private void onPostExecute(String result) {
             //data structure is ready.
-            mAdapter.setData(list);
-            mSwipeRefreshLayout.setRefreshing(false);  //turn of the refresh.
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.setData(list);
+                    mSwipeRefreshLayout.setRefreshing(false);  //turn of the refresh.
+                }
+            });
+
         }
     }
 
-    /*
-     *this asynctask is passing parameters via post to the rest service.
+    /**
+     * this thread to passing parameters via post to the rest service.
      * The post parameters are setup correctly in the dataAsync method that is
-     * passed to the task.  It then open the connection, passes the parameters, authenicates
+     * passed to the task.  It then open the connection, passes the parameters, authenticates
      * and toasts the return value.
      */
+    private class doRest implements Runnable {
 
-    private class doRest extends AsyncTask<myDataAsync, String, Integer> {
+        myDataAsync myData;
 
+        doRest(myDataAsync data) {
+            myData = data;
+        }
         //how to write the parameters via a post method were used from here:
         //http://stackoverflow.com/questions/29536233/deprecated-http-classes-android-lollipop-5-1
 
-        @Override
-        protected Integer doInBackground(myDataAsync... params) {
+        public void run() {
             try {
                 //setup password authentication
                 Authenticator.setDefault(new MyAuthenticator());
                 //setup the url
-                URL url = params[0].uri.toURL();
+                URL url = myData.uri.toURL();
                 //make the connection
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 //setup as post method and write out the parameters.
@@ -363,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
                 OutputStream os = con.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(os, StandardCharsets.UTF_8));
-                writer.write(params[0].data);
+                writer.write(myData.data);
                 writer.flush();
                 writer.close();
                 os.close();
@@ -382,19 +387,20 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
                 } else
                     response = new StringBuilder("0");
 
-                return Integer.valueOf(response.toString());
+                StringBuilder finalResponse = response;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Result: " + finalResponse.toString(), Toast.LENGTH_LONG).show();
+                        doDataUpdate();  //data has been added/removed, update the recyclerview.
+                    }
+                });
+
             } catch (Exception e) {
-                // failure of some kind.  uncomment the stacktrace to see what happened if it is
-                // permit error.
-                //e.printStackTrace();
-                return 0;
+                // failure of some kind.  uncomment the stacktrace to see what happened if it is permit error.
+                e.printStackTrace();
             }
 
-        }
-
-        protected void onPostExecute(Integer result) {
-            Toast.makeText(getApplicationContext(), "Result: " + result, Toast.LENGTH_LONG).show();
-            doDataUpdate();  //data has been added/removed, update the recyclerview.
         }
     }
 }
