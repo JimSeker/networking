@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         //setup the adapter, which is myAdapter, see the code.  set it initially to null
         //use the asynctask to set the data later after it is loaded.
         //async task to get size of via query.
-        mAdapter = new myAdapter(null, R.layout.rowlayout, getApplicationContext(), getSupportFragmentManager());
+        mAdapter = new myAdapter(null, R.layout.rowlayout, this);
         //add the adapter to the recyclerview
         mRecyclerView.setAdapter(mAdapter);
 
