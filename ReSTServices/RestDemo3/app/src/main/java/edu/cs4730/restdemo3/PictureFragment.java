@@ -1,10 +1,11 @@
 package edu.cs4730.restdemo3;
 
-
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Fragment;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ContextThemeWrapper;
@@ -12,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,14 +22,11 @@ public class PictureFragment extends DialogFragment {
     ImageView iv;
     Bitmap bm;
 
-    public PictureFragment() {
-        // Required empty public constructor
-    }
-
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        LayoutInflater inflater = LayoutInflater.from(requireActivity());
         // Inflate the layout for this fragment
         View myView = inflater.inflate(R.layout.fragment_picture, null);
         iv = myView.findViewById(R.id.imageView1);
@@ -41,7 +38,7 @@ public class PictureFragment extends DialogFragment {
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.Theme_AppCompat));
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(requireActivity(), R.style.Theme_AppCompat));
         builder.setView(myView);
         // request a window without the title
 

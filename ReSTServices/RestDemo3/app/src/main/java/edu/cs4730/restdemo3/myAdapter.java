@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +27,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-/*
+/**
  * this adapter is very similar to the adapters used for listview, except a ViewHolder is required
  * see http://developer.android.com/training/improving-layouts/smooth-scrolling.html
  * except instead having to implement a ViewHolder, it is implemented within
@@ -50,6 +52,7 @@ class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
         loading = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.loading);
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(rowLayout, viewGroup, false);

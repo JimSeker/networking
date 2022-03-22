@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     myAdapter mAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
     }
 
     /*
@@ -109,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 reader = new BufferedReader(new InputStreamReader(in));
                 while ((line = reader.readLine()) != null) {
                     publishProgress(line);  //create the data structure as we go.
-                    sb.append(line + NL);
+                    sb.append(line).append(NL);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
