@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.annotation.NonNull;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -43,15 +44,15 @@ import java.util.Map;
  * The service has a query.php, insert.php, update.php, and delete.php
  * The data returned from query is in a csv format.  The other three return a number that states
  * how "objects" where changed.
- *
+ * <p>
  * Authenticator info can be found here
  * http://docs.oracle.com/javase/6/docs/technotes/guides/net/http-auth.html  and
  * http://stackoverflow.com/questions/4883100/how-to-handle-http-authentication-using-httpurlconnection
- *
+ * <p>
  * SECURITY NOTE:
  * https really should be used so the username and password are encrypted, but our website doesn't have a valid cert,
  * if yours does, change it to https://... * and HttpsURLconnection and everything else is the same.
- *
+ * <p>
  * Note, https://koz.io/android-m-and-the-war-on-cleartext-traffic/
  * In the AndroidManifest.xml there is < application ... android:usesCleartextTraffic="true" ...
  * The test server doesn't have a legit cert, so... @#$@ it, cleartext it is.
@@ -66,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
     SwipeRefreshLayout mSwipeRefreshLayout;
     ArrayList<myObj> list = null;
     URI uri;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         mAdapter.setOnItemClickListener(new myAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String mid, String mtitle, String mbody) {
-                myDialogFragment myDialog = myDialogFragment.newInstance(true, Integer.valueOf(mid), mtitle, mbody);
+                myDialogFragment myDialog = myDialogFragment.newInstance(true, Integer.parseInt(mid), mtitle, mbody);
                 myDialog.show(getSupportFragmentManager(), null);
             }
         });
@@ -128,13 +128,13 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         //setup left/right swipes on the cardviews for the delete.
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 //likely allows to for animations?  or moving items in the view I think.
                 return false;
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 //called when it has been animated off the screen.  So item is no longer showing.
                 //use ItemtouchHelper.X to find the correct one.
 
