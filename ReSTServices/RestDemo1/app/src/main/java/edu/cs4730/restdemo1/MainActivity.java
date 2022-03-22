@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         //setup the RecyclerView
         mRecyclerView = findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -67,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new myAdapter(null, R.layout.rowlayout, getApplicationContext());
         //add the adapter to the recyclerview
         mRecyclerView.setAdapter(mAdapter);
-
 
         //SwipeRefreshlayout setup.
         mSwipeRefreshLayout = findViewById(R.id.activity_main_swipe_refresh_layout);
@@ -112,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 reader = new BufferedReader(new InputStreamReader(in));
                 while ((line = reader.readLine()) != null) {
-                    sb.append(line + NL);
+                    sb.append(line).append(NL);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
