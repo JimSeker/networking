@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //this way creates the thread anonymously.  quick and dirty, but generally a bad idea.
-                //new Thread(new doNetwork()).start();
+                new Thread(new doNetwork()).start();
 
                 //better way is this way, where we have access to the thread variable.
                 doNetwork stuff = new doNetwork();
