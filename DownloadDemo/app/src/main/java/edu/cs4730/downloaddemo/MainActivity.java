@@ -23,8 +23,6 @@ import android.database.Cursor;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -72,10 +70,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {  //For API 29+ (q), for 26 to 28.
-            REQUIRED_PERMISSIONS = new String[]{"android.permission.ACCESS_MEDIA_LOCATION"};
-        } else {
-            REQUIRED_PERMISSIONS = new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"};
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {  //For API 33+
+            REQUIRED_PERMISSIONS = new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION, Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.POST_NOTIFICATIONS};
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {  //For API 29+ (q) to 32.
+            REQUIRED_PERMISSIONS = new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION};
+        } else { //for 26 to 28.
+            REQUIRED_PERMISSIONS = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         }
         logger = findViewById(R.id.logger);
 
@@ -213,16 +213,16 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } else if (status == DownloadManager.STATUS_FAILED) {
-                   // Toast.makeText(MainActivity.this,"FAILED!\n" + "reason of " + reason,  Toast.LENGTH_LONG).show();
+                    // Toast.makeText(MainActivity.this,"FAILED!\n" + "reason of " + reason,  Toast.LENGTH_LONG).show();
                     logthis("FAILED!\n" + "reason of " + reason);
                 } else if (status == DownloadManager.STATUS_PAUSED) {
-                   // Toast.makeText(MainActivity.this,"PAUSED!\n" + "reason of " + reason,  Toast.LENGTH_LONG).show();
+                    // Toast.makeText(MainActivity.this,"PAUSED!\n" + "reason of " + reason,  Toast.LENGTH_LONG).show();
                     logthis("PAUSED!\n" + "reason of " + reason);
                 } else if (status == DownloadManager.STATUS_PENDING) {
-                   // Toast.makeText(MainActivity.this,"PENDING!", Toast.LENGTH_LONG).show();
+                    // Toast.makeText(MainActivity.this,"PENDING!", Toast.LENGTH_LONG).show();
                     logthis("PENDING!");
                 } else if (status == DownloadManager.STATUS_RUNNING) {
-                   // Toast.makeText(MainActivity.this,"RUNNING!", Toast.LENGTH_LONG).show();
+                    // Toast.makeText(MainActivity.this,"RUNNING!", Toast.LENGTH_LONG).show();
                     logthis("RUNNING!");
                 }
             }
