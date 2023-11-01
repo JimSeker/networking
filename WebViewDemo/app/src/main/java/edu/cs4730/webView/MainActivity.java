@@ -2,6 +2,7 @@ package edu.cs4730.webView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,9 +10,10 @@ import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import edu.cs4730.webView.databinding.ActivityMainBinding;
 
 /**
  * Had to a android:usesCleartextTraffic="true" to get it read none https web sites.  dumb... really stupid android.
@@ -24,53 +26,53 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    WebView browser;
-    Button btnZoomIn, btnZoomOut, btnBack, btnForward;
+    ActivityMainBinding binding;
 
     @SuppressLint("SetJavaScriptEnabled")  //I want it turned on for demo, stop bitching.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         //setup the WebView object and give it the initial destination.
-        browser = findViewById(R.id.webkit);
-        browser.getSettings().setJavaScriptEnabled(true);
-        browser.getSettings().setBuiltInZoomControls(true);
-        browser.loadUrl("https://www.cs.uwyo.edu/~seker/");  //see note about UW main page for why ~seker/
+
+        binding.webkit.getSettings().setJavaScriptEnabled(true);
+        binding.webkit.getSettings().setBuiltInZoomControls(true);
+        binding.webkit.loadUrl("https://www.eecs.uwyo.edu/~seker/");  //see note about UW main page for why ~seker/
 
         //setup the callBack, so when the user clicks a link, we intercept it and kept everything in the app.
-        browser.setWebViewClient(new CallBack());
+        binding.webkit.setWebViewClient(new CallBack());
 
         //how buttons from zoom and forward/back.
-        btnZoomIn = findViewById(R.id.btnZoomIn);
-        btnZoomIn.setOnClickListener(new View.OnClickListener() {
+
+        binding.btnZoomIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                browser.zoomIn();
+                binding.webkit.zoomIn();
             }
         });
-        btnZoomOut = findViewById(R.id.btnZoomOut);
-        btnZoomOut.setOnClickListener(new View.OnClickListener() {
+
+        binding.btnZoomOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                browser.zoomOut();
+                binding.webkit.zoomOut();
             }
         });
-        btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(new View.OnClickListener() {
+
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (browser.canGoBack()) {
-                    browser.goBack();
+                if (binding.webkit.canGoBack()) {
+                    binding.webkit.goBack();
                 }
             }
         });
-        btnForward = findViewById(R.id.btnFoward);
-        btnForward.setOnClickListener(new View.OnClickListener() {
+
+        binding.btnFoward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (browser.canGoForward()) {
-                    browser.goForward();
+                if (binding.webkit.canGoForward()) {
+                    binding.webkit.goForward();
                 }
             }
         });
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
         //API 24+, so the N check is just for studio to shut up about it.
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            Log.d("over", request.getUrl().toString());
             view.loadUrl(request.getUrl().toString());
             return true;
         }
@@ -97,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && browser.canGoBack()) {
-            browser.goBack();
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && binding.webkit.canGoBack()) {
+            binding.webkit.goBack();
             return true;
         }
         return super.onKeyDown(keyCode, event);
