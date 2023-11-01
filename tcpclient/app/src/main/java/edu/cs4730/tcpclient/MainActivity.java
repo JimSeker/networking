@@ -1,14 +1,13 @@
 package edu.cs4730.tcpclient;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -17,6 +16,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+
+import edu.cs4730.tcpclient.databinding.ActivityMainBinding;
 
 /**
  * Note, https://koz.io/android-m-and-the-war-on-cleartext-traffic/
@@ -29,26 +30,23 @@ import java.net.Socket;
 
 
 public class MainActivity extends AppCompatActivity {
-    TextView logger;
-    Button mkconn;
-    EditText hostname, port;
+    ActivityMainBinding binding;
     Thread myNet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        logger = findViewById(R.id.logger);
-        logger.append("\n");
-        hostname = findViewById(R.id.EThostname);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        binding.logger.append("\n");
         //This address is the localhost for the computer the emulator is running on.  If you are running
         //tcpserv in another emulator on the same machine, use this address
-        hostname.setText("10.0.2.2");
+        binding.EThostname.setText("10.0.2.2");
         //This would be more running on the another phone or different host and likely not this ip address either.
         //hostname.setText("10.121.174.200");
-        port = findViewById(R.id.ETport);
-        mkconn = findViewById(R.id.makeconn);
-        mkconn.setOnClickListener(new View.OnClickListener() {
+
+        binding.makeconn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 doNetwork stuff = new doNetwork();
@@ -58,14 +56,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private Handler handler = new Handler(new Handler.Callback() {
+    private final Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
-        public boolean handleMessage(Message msg) {
-            logger.append(msg.getData().getString("msg"));
-            return true;
+        public void handleMessage(@NonNull Message msg) {
+            binding.logger.append(msg.getData().getString("msg"));
         }
 
-    });
+    };
 
     public void mkmsg(String str) {
         //handler junk, because thread can't update screen!
@@ -85,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
         public BufferedReader in;
 
         public void run() {
-            int p = Integer.parseInt(port.getText().toString());
-            String h = hostname.getText().toString();
+            int p = Integer.parseInt(binding.ETport.getText().toString());
+            String h = binding.EThostname.getText().toString();
             mkmsg("host is " + h + "\n");
             mkmsg(" Port is " + p + "\n");
             try {

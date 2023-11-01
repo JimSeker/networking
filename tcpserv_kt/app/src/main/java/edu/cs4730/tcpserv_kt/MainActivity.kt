@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import edu.cs4730.tcpserv_kt.databinding.ActivityMainBinding
 import java.io.*
 import java.net.ServerSocket
 
@@ -33,20 +34,17 @@ import java.net.ServerSocket
  * to setup the emulator to receive.
  */
 class MainActivity : AppCompatActivity() {
-    lateinit var logger: TextView
-    lateinit var mkconn: Button
-    lateinit var port: EditText
+    lateinit var binding: ActivityMainBinding
     var myNet: Thread? = null
     var TAG = "TCPserv"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        logger = findViewById(R.id.logger)
-        logger.append("\n\n")
-        port = findViewById(R.id.ETport)
-        mkconn = findViewById(R.id.makeconn)
-        mkconn.setOnClickListener {
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.logger.append("\n\n")
+        binding.makeconn.setOnClickListener {
             //this way creates the thread anonymously.  quick and dirty, but generally a bad idea.
             //Thread(doNetwork()).start()
 
@@ -59,8 +57,9 @@ class MainActivity : AppCompatActivity() {
         //What is our IP address?
         val wm = getSystemService(WIFI_SERVICE) as WifiManager
         //noinspection deprecation    wifi can't return a ipv6, which is what the issue is, formater doesn't support ipv6
+        @Suppress("DEPRECATION")
         val ip = Formatter.formatIpAddress(wm.connectionInfo.ipAddress)
-        logger.append("Server IP address is $ip\n")
+        binding.logger.append("Server IP address is $ip\n")
     }
 
     /**
@@ -69,7 +68,7 @@ class MainActivity : AppCompatActivity() {
     fun mkmsg(str: String) {
         //so the client uses a handler, while the server code is going to use runUI method.
         //the method name makes no sense here, but keeping the name, so it matches the tpcclient.
-        runOnUiThread { logger.append(str) }
+        runOnUiThread { binding.logger.append(str) }
     }
 
     /**
@@ -80,7 +79,7 @@ class MainActivity : AppCompatActivity() {
      */
     private inner class doNetwork : Runnable {
         override fun run() {
-            val p = port.text.toString().toInt()
+            val p = binding.ETport.text.toString().toInt()
             mkmsg(" Port is $p\n")
             try {
                 mkmsg("Waiting on Connecting...\n")

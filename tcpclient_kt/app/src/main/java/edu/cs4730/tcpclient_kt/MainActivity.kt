@@ -2,13 +2,16 @@ package edu.cs4730.tcpclient_kt
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import java.io.*
+import edu.cs4730.tcpclient_kt.databinding.ActivityMainBinding
+import java.io.BufferedReader
+import java.io.BufferedWriter
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.io.PrintWriter
 import java.net.InetAddress
 import java.net.Socket
 
@@ -22,34 +25,32 @@ import java.net.Socket
  * on phones as well.  You just need to know the IP address.
  */
 class MainActivity : AppCompatActivity() {
-    lateinit var logger: TextView
-    lateinit var mkconn: Button
-    lateinit var hostname: EditText
-    lateinit var port: EditText
+    lateinit var binding: ActivityMainBinding
+
     var myNet: Thread? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        logger = findViewById(R.id.logger)
-        logger.append("\n")
-        hostname = findViewById(R.id.EThostname)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.logger.append("\n")
+
         //This address is the localhost for the computer the emulator is running on.  If you are running
         //tcpserv in another emulator on the same machine, use this address
-        hostname.setText("10.0.2.2")
+        binding.EThostname.setText("10.0.2.2")
         //This would be more running on the another phone or different host and likely not this ip address either.
         //hostname.setText("10.121.174.200");
-        port = findViewById(R.id.ETport)
-        mkconn = findViewById(R.id.makeconn)
-        mkconn.setOnClickListener(View.OnClickListener {
+        binding.makeconn.setOnClickListener(View.OnClickListener {
             val stuff: doNetwork = doNetwork()
             myNet = Thread(stuff)
             myNet!!.start()
         })
     }
 
-    private val handler = Handler { msg ->
-        logger.append(msg.data.getString("msg"))
-        true
+    private val handler: Handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            binding.logger.append(msg.data.getString("msg"))
+        }
     }
 
     fun mkmsg(str: String?) {
@@ -69,8 +70,8 @@ class MainActivity : AppCompatActivity() {
         lateinit var netOut: PrintWriter
         lateinit var netIn : BufferedReader  //in is a reserved word in kotlin.
         override fun run() {
-            val p = port.text.toString().toInt()
-            val h = hostname.text.toString()
+            val p = binding.ETport.text.toString().toInt()
+            val h = binding.EThostname.text.toString()
             mkmsg("host is $h\n")
             mkmsg(" Port is $p\n")
             try {

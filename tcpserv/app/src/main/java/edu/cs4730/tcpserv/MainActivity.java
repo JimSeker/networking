@@ -22,6 +22,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import edu.cs4730.tcpserv.databinding.ActivityMainBinding;
+import kotlin.Suppress;
+
 /**
  * Note, https://koz.io/android-m-and-the-war-on-cleartext-traffic/
  * In the AndroidManifest.xml there is < application ... android:usesCleartextTraffic="true" ...
@@ -46,27 +49,22 @@ import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView logger;
-    Button mkconn;
-    EditText port;
+    ActivityMainBinding binding;
     Thread myNet;
-
     String TAG = "TCPserv";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        logger = findViewById(R.id.logger);
-        logger.append("\n\n");
-        port = findViewById(R.id.ETport);
-        mkconn = findViewById(R.id.makeconn);
-        mkconn.setOnClickListener(new View.OnClickListener() {
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        binding.logger.append("\n\n");
+        binding.makeconn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //this way creates the thread anonymously.  quick and dirty, but generally a bad idea.
-              //  new Thread(new doNetwork()).start();
+                //  new Thread(new doNetwork()).start();
 
                 //better way is this way, where we have access to the thread variable.
                 doNetwork stuff = new doNetwork();
@@ -78,12 +76,13 @@ public class MainActivity extends AppCompatActivity {
         //What is our IP address?
         WifiManager wm = (WifiManager) getSystemService(Service.WIFI_SERVICE);
         //noinspection deprecation    wifi can't return a ipv6, which is what the issue is, formater doesn't support ipv6
+        @Suppress(names = "DEPRECATION")
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-        logger.append("Server IP address is " + ip + "\n");
+        binding.logger.append("Server IP address is " + ip + "\n");
     }
 
     /**
-     * simple hepler method to update the logger/output textview.
+     * simple helper method to update the logger/output textview.
      */
     public void mkmsg(String str) {
         //so the client uses a handler, while the server code is going to use runUI method.
@@ -91,21 +90,21 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                logger.append(str);
+                binding.logger.append(str);
             }
         });
     }
 
     /**
      * Most of the work is done here, so it does not lock the UI thread.  Calls mkmsg, which run on the main thread to do updates.
-     *
+     * <p>
      * protocol for the example is the server reads in a line and then sends a line.
      * then it closes the connection.
      */
     private class doNetwork implements Runnable {
         public void run() {
 
-            int p = Integer.parseInt(port.getText().toString());
+            int p = Integer.parseInt(binding.ETport.getText().toString());
             mkmsg(" Port is " + p + "\n");
 
             try {
