@@ -6,7 +6,6 @@ import android.security.NetworkSecurityPolicy;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +20,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import edu.cs4730.httpurlcondemoasync.databinding.ActivityMainBinding;
+
 /**
  * Example using a Async task to get a web page.
  * <p>
@@ -31,25 +32,24 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 
 public class MainActivity extends AppCompatActivity implements Button.OnClickListener {
-    TextView output;
-    Button mkconn;
+    ActivityMainBinding binding;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        output = findViewById(R.id.output);
-        output.append("\n");
-        mkconn = findViewById(R.id.makeconn);
-        mkconn.setOnClickListener(this);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        binding.makeconn.setOnClickListener(this);
 
+        binding.output.append("\n");
         if (NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted()) {
-            output.append("Clear Text traffic is allowed.\n");
+            binding.output.append("Clear Text traffic is allowed.\n");
         } else {
-            output.append("Clear Text traffic is NOT allowed.\n");
+            binding.output.append("Clear Text traffic is NOT allowed.\n");
         }
+
     }
 
 
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             // url1 = new URI("https://www.google.com/");
             new doNetwork().execute(url1);
         } catch (URISyntaxException e) {
-            output.append("URI method failed?!  ");
+            binding.output.append("URI method failed?!  ");
             //e.printStackTrace();
         }
     }
@@ -114,8 +114,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             try {
                 //URL url = new URL(params[0].toString()); //but next line is much better! convert directly.
                 URL url = params[0].toURL();
-                publishProgress("address: "+ url.toString()+ "\n");
-                if (URLUtil.isHttpsUrl(url.toString()) ){
+                publishProgress("address: " + url.toString() + "\n");
+                if (URLUtil.isHttpsUrl(url.toString())) {
                     HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
                     publishProgress("Connection made, reading in page.\n");
                     page = readStream(con.getInputStream());
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
          * This takes the place of handlers and my makemsg method, since we can directly access the screen.
          */
         protected void onProgressUpdate(String... progress) {
-            output.append(progress[0]);
+            binding.output.append(progress[0]);
         }
 
         /**
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
          * to the screen.
          */
         protected void onPostExecute(String result) {
-            output.append(result);
+            binding.output.append(result);
         }
     }
 }

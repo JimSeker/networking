@@ -6,7 +6,6 @@ import android.os.Message;
 import android.security.NetworkSecurityPolicy;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,6 +17,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import edu.cs4730.httpurlcondemothread.databinding.ActivityMainBinding;
+
 /**
  * This get a web page via the URL connection with a thread.
  * <p>
@@ -28,23 +29,22 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 
 public class MainActivity extends AppCompatActivity implements Button.OnClickListener {
-    TextView output;
-    Button mkconn;
+    ActivityMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        output = findViewById(R.id.output);
-        output.append("\n");
-        mkconn = findViewById(R.id.makeconn);
-        mkconn.setOnClickListener(this);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        binding.makeconn.setOnClickListener(this);
 
+        binding.output.append("\n");
         if (NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted()) {
-            output.append("Clear Text traffic is allowed.\n");
+            binding.output.append("Clear Text traffic is allowed.\n");
         } else {
-            output.append("Clear Text traffic is NOT allowed.\n");
+            binding.output.append("Clear Text traffic is NOT allowed.\n");
         }
 
     }
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            output.append(msg.getData().getString("msg"));
+            binding.output.append(msg.getData().getString("msg"));
             return true;
         }
 

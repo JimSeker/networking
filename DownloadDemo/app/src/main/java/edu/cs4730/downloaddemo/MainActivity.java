@@ -29,8 +29,9 @@ import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import edu.cs4730.downloaddemo.databinding.ActivityMainBinding;
 
 /**
  * This is a simple example of how to use the download manager.  except not really that simple anymore with all permissions needed.
@@ -55,20 +56,19 @@ public class MainActivity extends AppCompatActivity {
 
     //SharedPreferences preferenceManager;
     DownloadManager downloadManager;
-
     String TAG = "MainActivity";
-    TextView logger;
+    ActivityMainBinding binding;
 
     ActivityResultLauncher<String[]> rpl;
     private String[] REQUIRED_PERMISSIONS;
-
     /**
      * Called when the activity is first created.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {  //For API 33+
             REQUIRED_PERMISSIONS = new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION, Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.POST_NOTIFICATIONS};
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         } else { //for 26 to 28.
             REQUIRED_PERMISSIONS = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         }
-        logger = findViewById(R.id.logger);
 
         //Use this to check permissions.
         rpl = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
@@ -160,11 +159,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onResume() {
         super.onResume();
         IntentFilter intentFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-        registerReceiver(downloadReceiver, intentFilter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {  //For API 33+
+            registerReceiver(downloadReceiver, intentFilter, Context.RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(downloadReceiver, intentFilter);
+        }
     }
 
     @Override
@@ -173,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(downloadReceiver);
     }
 
-    private BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
         long intentdownloadId;
 
         @Override
@@ -232,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void logthis(String item) {
         if (!item.equals("")) {
-            logger.append(item + "\n");
+            binding.logger.append(item + "\n");
             Log.w(TAG, item);
         }
     }
