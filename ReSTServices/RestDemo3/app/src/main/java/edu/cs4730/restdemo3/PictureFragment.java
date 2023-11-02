@@ -3,23 +3,22 @@ package edu.cs4730.restdemo3;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ContextThemeWrapper;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
+
+import edu.cs4730.restdemo3.databinding.FragmentPictureBinding;
 
 /**
- * A simple {@link Fragment} subclass.
+ * simple frameless dialog to display the picture.
  */
 public class PictureFragment extends DialogFragment {
 
-    ImageView iv;
     Bitmap bm;
 
     @NonNull
@@ -28,10 +27,10 @@ public class PictureFragment extends DialogFragment {
 
         LayoutInflater inflater = LayoutInflater.from(requireActivity());
         // Inflate the layout for this fragment
-        View myView = inflater.inflate(R.layout.fragment_picture, null);
-        iv = myView.findViewById(R.id.imageView1);
-        iv.setImageBitmap(bm);
-        iv.setOnClickListener(new View.OnClickListener() {
+        FragmentPictureBinding binding = FragmentPictureBinding.inflate(inflater);
+
+        binding.imageView1.setImageBitmap(bm);
+        binding.imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -39,14 +38,11 @@ public class PictureFragment extends DialogFragment {
         });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(requireActivity(), R.style.Theme_AppCompat));
-        builder.setView(myView);
-        // request a window without the title
+        builder.setView(binding.getRoot());
 
         Dialog dialog = builder.create();
-
+        // request a window without the title
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        //don't think this is working.
-        //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Translucent_NoTitleBar);
         return dialog;
     }

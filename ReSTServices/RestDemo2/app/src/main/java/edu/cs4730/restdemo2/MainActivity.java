@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
 
 import android.os.Bundle;
@@ -38,6 +37,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.cs4730.restdemo2.databinding.ActivityMainBinding;
+
 /**
  * an example of custom rest service.  Note, the rest service here will only answer to ip from on UW's campus
  * The service has a query.php, insert.php, update.php, and delete.php
@@ -61,18 +62,17 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements myDialogFragment.OnFragmentInteractionListener {
     String TAG = "MainActivity";
-    RecyclerView mRecyclerView;
+    ActivityMainBinding binding;
     myAdapter mAdapter;
-    SwipeRefreshLayout mSwipeRefreshLayout;
     ArrayList<myObj> list = null;
     URI uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
 
         try {
             uri = new URI("http://www.cs.uwyo.edu/~seker/rest/query.php");
@@ -92,12 +92,11 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         });
 
         //setup the RecyclerView
-        mRecyclerView = findViewById(R.id.list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        binding.list.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        binding.list.setItemAnimator(new DefaultItemAnimator());
         //setup the adapter, which is myAdapter, see the code.  set it initially to null
         //use the asynctask to set the data later after it is loaded.
-        mAdapter = new myAdapter(null, R.layout.rowlayout, getApplicationContext());
+        mAdapter = new myAdapter(null, getApplicationContext());
         mAdapter.setOnItemClickListener(new myAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String mid, String mtitle, String mbody) {
@@ -106,15 +105,13 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
             }
         });
         //add the adapter to the recyclerview
-        mRecyclerView.setAdapter(mAdapter);
-
+        binding.list.setAdapter(mAdapter);
 
         //SwipeRefreshlayout setup.
-        mSwipeRefreshLayout = findViewById(R.id.activity_main_swipe_refresh_layout);
         //setup some colors for the refresh circle.
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+        binding.activityMainSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         //now setup the swiperefrestlayout listener where the main work is done.
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.activityMainSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 //where we call the refresher parts.
@@ -139,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
 
                 if (direction == ItemTouchHelper.RIGHT) {
                     //user wants to delet this entry.
-                    int item = Integer.parseInt(((myAdapter.ViewHolder) viewHolder).tvID.getText().toString());
+                    int item = Integer.parseInt(((myAdapter.ViewHolder) viewHolder).viewBinding.tvId.getText().toString());
                     try {
                         //run thread task to delete this data item.
                         new Thread(new doRest(new myDataAsync(new URI("http://www.cs.uwyo.edu/~seker/rest/delete.php"),
@@ -153,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+        itemTouchHelper.attachToRecyclerView(binding.list);
     }
 
 
@@ -202,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
 
     //simple method that is called by lots of different spots, to reload the query data.
     public void doDataUpdate() {
-        mSwipeRefreshLayout.setRefreshing(true);
+        binding.activityMainSwipeRefreshLayout.setRefreshing(true);
         //call the refresh code manually here.
         list = new ArrayList<myObj>();  //set the list.
         new Thread(new doNetwork(uri)).start();
@@ -268,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         //as a string, with line separators (ie end of line markers)
         private String readStream(InputStream in) {
             BufferedReader reader = null;
-            StringBuilder sb = new StringBuilder("");
+            StringBuilder sb = new StringBuilder();
             String line = "";
             String NL = System.getProperty("line.separator");
             try {
@@ -330,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
                 @Override
                 public void run() {
                     mAdapter.setData(list);
-                    mSwipeRefreshLayout.setRefreshing(false);  //turn of the refresh.
+                    binding.activityMainSwipeRefreshLayout.setRefreshing(false);  //turn of the refresh.
                 }
             });
 

@@ -2,6 +2,8 @@ package edu.cs4730.restdemo2;
 
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +13,8 @@ import android.widget.TextView;
 
 
 import java.util.ArrayList;
+
+import edu.cs4730.restdemo2.databinding.RowlayoutBinding;
 
 /*
  * this adapter is very similar to the adapters used for listview, except a ViewHolder is required
@@ -22,7 +26,6 @@ import java.util.ArrayList;
 class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
 
     private ArrayList<myObj> myList;
-    private int rowLayout;
     private Context mContext;
 
     // Define listener member variable
@@ -37,15 +40,14 @@ class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
     }
 
 
-    myAdapter(ArrayList<myObj> myList, int rowLayout, Context context) {
+    myAdapter(ArrayList<myObj> myList, Context context) {
         this.myList = myList;
-        this.rowLayout = rowLayout;
         this.mContext = context;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(rowLayout, viewGroup, false);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        RowlayoutBinding v = RowlayoutBinding.inflate(LayoutInflater.from(mContext), viewGroup, false);
         return new ViewHolder(v);
     }
 
@@ -55,14 +57,14 @@ class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
         myObj entry;
         entry = myList.get(i);
 
-        viewHolder.tvID.setText(String.valueOf(entry.id));
-        viewHolder.title.setText(entry.title);
-        viewHolder.body.setText(entry.body);
-        viewHolder.cardview.setOnClickListener(new View.OnClickListener() {
+        viewHolder.viewBinding.tvId.setText(String.valueOf(entry.id));
+        viewHolder.viewBinding.tvTitle.setText(entry.title);
+        viewHolder.viewBinding.tvBody.setText(entry.body);
+        viewHolder.viewBinding.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onItemClick(viewHolder.tvID.getText().toString(), viewHolder.title.getText().toString(), viewHolder.body.getText().toString());
+                    listener.onItemClick(viewHolder.viewBinding.tvId.getText().toString(), viewHolder.viewBinding.tvTitle.getText().toString(), viewHolder.viewBinding.tvBody.getText().toString());
                 }
 
                 //Toast.makeText(mContext, "id is " + viewHolder.tvID.getText().toString(), Toast.LENGTH_LONG).show();
@@ -83,17 +85,12 @@ class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvID;
-        TextView title;
-        TextView body;
-        CardView cardview;
+        public RowlayoutBinding viewBinding;
 
-        ViewHolder(View itemView) {
-            super(itemView);
-            tvID =  itemView.findViewById(R.id.tv_id);
-            title =  itemView.findViewById(R.id.tv_title);
-            body = itemView.findViewById(R.id.tv_body);
-            cardview =  itemView.findViewById(R.id.cardview);
+        ViewHolder(RowlayoutBinding viewBinding) {
+            super(viewBinding.getRoot());
+            this.viewBinding = viewBinding;
+
         }
     }
 }

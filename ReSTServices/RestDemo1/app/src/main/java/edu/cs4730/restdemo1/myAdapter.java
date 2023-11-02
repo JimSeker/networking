@@ -3,18 +3,18 @@ package edu.cs4730.restdemo1;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import edu.cs4730.restdemo1.databinding.RowlayoutBinding;
 
 /**
  * this adapter is very similar to the adapters used for listview, except a ViewHolder is required
@@ -26,20 +26,17 @@ import org.json.JSONObject;
 class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
 
     private JSONArray myList;
-    private int rowLayout;
     private Context mContext;
 
-    //JSONObject  jsonRootObject = new JSONObject(strJson);
-    myAdapter(JSONArray myList, int rowLayout, Context context) {
+    myAdapter(JSONArray myList, Context context) {
         this.myList = myList;
-        this.rowLayout = rowLayout;
         this.mContext = context;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(rowLayout, viewGroup, false);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        RowlayoutBinding v = RowlayoutBinding.inflate(LayoutInflater.from(mContext), viewGroup, false);
         return new ViewHolder(v);
     }
 
@@ -49,15 +46,14 @@ class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
         JSONObject entry = null;
         try {
             entry = myList.getJSONObject(i);
-
-            viewHolder.UserID.setText(entry.optString("userId"));
-            viewHolder.aID.setText(entry.optString("id"));
-            viewHolder.title.setText(entry.optString("title"));
-            viewHolder.body.setText(entry.optString("body"));
-            viewHolder.cardview.setOnClickListener(new View.OnClickListener() {
+            viewHolder.viewBinding.tvUserid.setText(entry.optString("userId"));
+            viewHolder.viewBinding.tvAid.setText(entry.optString("id"));
+            viewHolder.viewBinding.tvTitle.setText(entry.optString("title"));
+            viewHolder.viewBinding.tvBody.setText(entry.optString("body"));
+            viewHolder.viewBinding.cardview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "id is " + viewHolder.aID.getText().toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "id is " + viewHolder.viewBinding.tvAid.getText().toString(), Toast.LENGTH_LONG).show();
                 }
             });
         } catch (JSONException e) {
@@ -77,19 +73,12 @@ class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView UserID;
-        TextView aID;
-        TextView title;
-        TextView body;
-        CardView cardview;
+        public RowlayoutBinding viewBinding;
 
-        ViewHolder(View itemView) {
-            super(itemView);
-            UserID = (TextView) itemView.findViewById(R.id.tv_userid);
-            aID = (TextView) itemView.findViewById(R.id.tv_aid);
-            title = (TextView) itemView.findViewById(R.id.tv_title);
-            body = (TextView) itemView.findViewById(R.id.tv_body);
-            cardview = (CardView) itemView.findViewById(R.id.cardview);
+        ViewHolder(RowlayoutBinding viewBinding) {
+            super(viewBinding.getRoot());
+            this.viewBinding = viewBinding;
+
         }
     }
 }

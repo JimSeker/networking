@@ -32,6 +32,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
+import edu.cs4730.restdemo3.databinding.RowlayoutBinding;
+
 /**
  * this adapter is very similar to the adapters used for listview, except a ViewHolder is required
  * see http://developer.android.com/training/improving-layouts/smooth-scrolling.html
@@ -41,7 +43,6 @@ import java.util.ArrayList;
 
 class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
 
-    private int rowLayout;
     private Context mContext;
     private ArrayList<myObj> list = null;
     private PictureFragment myDialog;
@@ -49,10 +50,9 @@ class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
     private Bitmap loading;
     private AppCompatActivity act;
 
-    myAdapter(ArrayList<myObj> mlist, int mrowLayout, AppCompatActivity mAct) {
+    myAdapter(ArrayList<myObj> mlist, AppCompatActivity mAct) {
         list = mlist;
         act = mAct;
-        rowLayout = mrowLayout;
         mContext = mAct.getApplicationContext();
         fm = mAct.getSupportFragmentManager();
         myDialog = new PictureFragment();
@@ -61,22 +61,22 @@ class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(rowLayout, viewGroup, false);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        RowlayoutBinding v = RowlayoutBinding.inflate(LayoutInflater.from(mContext), viewGroup, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int i) {
 
-        viewHolder.id = i;
-        viewHolder.title.setText(list.get(i).title);
-        viewHolder.pic.setImageBitmap(loading);
+        viewHolder.id = viewHolder.getAbsoluteAdapterPosition();
+        viewHolder.viewBinding.tvTitle.setText(list.get(i).title);
+        viewHolder.viewBinding.ivPic.setImageBitmap(loading);
         new Thread(new getPic(list.get(i).piclocation, viewHolder)).start();
-        viewHolder.cardview.setOnClickListener(new View.OnClickListener() {
+        viewHolder.viewBinding.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myDialog.setpic((Bitmap) viewHolder.pic.getTag());
+                myDialog.setpic((Bitmap) viewHolder.viewBinding.ivPic.getTag());
                 myDialog.show(fm, null);
             }
         });
@@ -94,16 +94,12 @@ class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        public RowlayoutBinding viewBinding;
         public int id;
-        public TextView title;
-        ImageView pic;
-        CardView cardview;
+        ViewHolder(RowlayoutBinding viewBinding) {
+            super(viewBinding.getRoot());
+            this.viewBinding = viewBinding;
 
-        ViewHolder(View itemView) {
-            super(itemView);
-            pic = itemView.findViewById(R.id.iv_pic);
-            title = itemView.findViewById(R.id.tv_title);
-            cardview = itemView.findViewById(R.id.cardview);
         }
     }
 
@@ -156,8 +152,8 @@ class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
             act.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    viewHolder.pic.setTag(bm);
-                    viewHolder.pic.setImageBitmap(bm);
+                    viewHolder.viewBinding.ivPic.setTag(bm);
+                    viewHolder.viewBinding.ivPic.setImageBitmap(bm);
                 }
             });
         }

@@ -1,6 +1,5 @@
 package edu.cs4730.restdemo2;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,9 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ContextThemeWrapper;
+
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
+
+import edu.cs4730.restdemo2.databinding.FragmentMyDialogBinding;
 
 
 /**
@@ -31,7 +31,6 @@ public class myDialogFragment extends DialogFragment {
     private String mParam3;
     private String mParam4;
 
-    EditText mTitle, mBody;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -76,50 +75,40 @@ public class myDialogFragment extends DialogFragment {
 
         LayoutInflater inflater = LayoutInflater.from(requireActivity());
         // Inflate the layout for this fragment
-        View myView = inflater.inflate(R.layout.fragment_my_dialog, null);
+        FragmentMyDialogBinding binding = FragmentMyDialogBinding.inflate(inflater);
 
-        mTitle = myView.findViewById(R.id.et_title);
-        mBody = myView.findViewById(R.id.et_body);
         if (mParam1) { //true it's an update
-            mTitle.setText(mParam3);
-            mBody.setText(mParam4);
+            binding.etTitle.setText(mParam3);
+            binding.etBody.setText(mParam4);
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(requireActivity(), R.style.Theme_AppCompat));
-        builder.setView(myView);
-        //Save, Cancel
+        builder.setView(binding.getRoot());
 
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 if (mListener != null) {
-                    mListener.onFragmentInteraction(mParam1, mParam2, mTitle.getText().toString(), mBody.getText().toString());
+                    mListener.onFragmentInteraction(mParam1, mParam2, binding.etTitle.getText().toString(), binding.etBody.getText().toString());
                 }
                 dismiss();
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dismiss();
-                }
-         }).setCancelable(true);
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dismiss();
+            }
+        }).setCancelable(true);
         return builder.create();
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        Activity activity;
 
-        if (context instanceof Activity) {
-            activity = (Activity) context;
-        } else {
-            activity = getActivity();
-        }
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnFragmentInteractionListener) requireActivity();
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(requireActivity().toString() + " must implement OnFragmentInteractionListener");
         }
     }
 

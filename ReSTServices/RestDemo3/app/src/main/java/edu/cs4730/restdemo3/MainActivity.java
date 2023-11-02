@@ -7,7 +7,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
@@ -24,6 +23,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import edu.cs4730.restdemo3.databinding.ActivityMainBinding;
+
 /**
  * Note, https://koz.io/android-m-and-the-war-on-cleartext-traffic/
  * In the AndroidManifest.xml there is < application ... android:usesCleartextTraffic="true" ...
@@ -32,44 +33,38 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity {
     String TAG = "MainActivity";
-    RecyclerView mRecyclerView;
+    ActivityMainBinding binding;
     myAdapter mAdapter;
-    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
 
-
         //setup the RecyclerView
-        mRecyclerView = findViewById(R.id.list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        binding.list.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        binding.list.setItemAnimator(new DefaultItemAnimator());
         //setup the adapter, which is myAdapter, see the code.  set it initially to null
         //use the asynctask to set the data later after it is loaded.
         //async task to get size of via query.
-        mAdapter = new myAdapter(null, R.layout.rowlayout, this);
+        mAdapter = new myAdapter(null,  this);
         //add the adapter to the recyclerview
-        mRecyclerView.setAdapter(mAdapter);
+        binding.list.setAdapter(mAdapter);
 
         //SwipeRefreshlayout setup.
-        mSwipeRefreshLayout = findViewById(R.id.activity_main_swipe_refresh_layout);
         //setup some colors for the refresh circle.
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+        binding.activityMainSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         //now setup the swiperefrestlayout listener where the main work is done.
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.activityMainSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 //where we call the refresher parts.
@@ -80,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void doupdate() {
-        mSwipeRefreshLayout.setRefreshing(true);
+        binding.activityMainSwipeRefreshLayout.setRefreshing(true);
         try {
             new Thread(new doNetwork(new URL("http://www.cs.uwyo.edu/~seker/rest/querypic.php"))).start();
         } catch (MalformedURLException e) {
@@ -104,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         //as a string, with line separators (ie end of line markers)
         private String readStream(InputStream in) {
             BufferedReader reader = null;
-            StringBuilder sb = new StringBuilder("");
+            StringBuilder sb = new StringBuilder();
             String line = "";
             String NL = System.getProperty("line.separator");
             try {
@@ -171,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     mAdapter.setData(list);
-                    mSwipeRefreshLayout.setRefreshing(false);  //turn of the refresh.
+                    binding.activityMainSwipeRefreshLayout.setRefreshing(false);  //turn of the refresh.
                 }
             });
         }

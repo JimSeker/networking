@@ -1,14 +1,10 @@
 package edu.cs4730.restdemo1;
 
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
@@ -24,33 +20,34 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import edu.cs4730.restdemo1.databinding.ActivityMainBinding;
+
 public class MainActivity extends AppCompatActivity {
     String TAG = "MainActivity";
-    RecyclerView mRecyclerView;
+    ActivityMainBinding binding;
     myAdapter mAdapter;
-    SwipeRefreshLayout mSwipeRefreshLayout;
     JSONArray list = null;
     URI uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setSupportActionBar(binding.toolbar);
+
         try {
             uri = new URI("https://jsonplaceholder.typicode.com/posts");
         } catch (URISyntaxException e) {
             Log.wtf(TAG, "error with uri");
             e.printStackTrace();
         }
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -59,26 +56,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //setup the RecyclerView
-        mRecyclerView = findViewById(R.id.list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        binding.list.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        binding.list.setItemAnimator(new DefaultItemAnimator());
         //setup the adapter, which is myAdapter, see the code.  set it initially to null
-        mAdapter = new myAdapter(null, R.layout.rowlayout, getApplicationContext());
+        mAdapter = new myAdapter(null, getApplicationContext());
         //add the adapter to the recyclerview
-        mRecyclerView.setAdapter(mAdapter);
+        binding.list.setAdapter(mAdapter);
 
         //SwipeRefreshlayout setup.
-        mSwipeRefreshLayout = findViewById(R.id.activity_main_swipe_refresh_layout);
         //setup some colors for the refresh circle.
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+        binding.activityMainSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         //now setup the swiperefrestlayout listener where the main work is done.
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.activityMainSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new Thread(new doNetwork(uri)).start();
             }
         });
-        mSwipeRefreshLayout.setRefreshing(true);
+        binding.activityMainSwipeRefreshLayout.setRefreshing(true);
         //call the refresh code manually here.
         new Thread(new doNetwork(uri)).start();
 
@@ -100,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                     Toast.makeText(getBaseContext(), "Data response is empty", Toast.LENGTH_SHORT).show();
                 }
-                mSwipeRefreshLayout.setRefreshing(false);  //turn off the refresh.
+                binding.activityMainSwipeRefreshLayout.setRefreshing(false);  //turn off the refresh.
             }
         });
     }
