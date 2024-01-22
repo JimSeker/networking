@@ -20,6 +20,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    namespace 'edu.cs4730.tcpclient'
 }
 
 dependencies {
