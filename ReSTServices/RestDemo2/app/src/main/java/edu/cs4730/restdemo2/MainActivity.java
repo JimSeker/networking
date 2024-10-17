@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
             BufferedReader reader = null;
             StringBuilder sb = new StringBuilder();
             String line = "";
-            String NL = System.getProperty("line.separator");
+            String NL = System.lineSeparator();
             try {
                 reader = new BufferedReader(new InputStreamReader(in));
                 while ((line = reader.readLine()) != null) {

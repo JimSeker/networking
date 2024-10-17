@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.pm.PackageManager;
@@ -126,15 +127,12 @@ public class MainActivity extends AppCompatActivity {
             .setAllowedOverRoaming(false)
             .setTitle(Download_filename)
             .setDescription("Video")
-            .setVisibleInDownloadsUi(true)  //show up in system download manager list.
             //show while downloading, and completed.  but doesn't appear while downloading.  may just be broken at this point.
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
             //only when completed.
             //.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
-            //visual, but not competed.  note, while running appears to be broken.  it doesn't show.
-            //.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Download_filename);
-        request.allowScanningByMediaScanner();
+        //request.allowScanningByMediaScanner(); //depreciated.  always scans downloads now.
         //for inside the app space, use
         //.setDestinationInExternalFilesDir(MainActivity.this, Environment.DIRECTORY_DOWNLOADS,Download_filename);
         download_id = downloadManager.enqueue(request);
@@ -154,12 +152,13 @@ public class MainActivity extends AppCompatActivity {
             //.setAllowedOverRoaming(true)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)  //api 11 and above!
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Download_filename);
-        request.allowScanningByMediaScanner();
+        //request.allowScanningByMediaScanner();
         download_id = downloadManager.enqueue(request);
     }
 
 
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag") //lent, learn if statements.
     @Override
     protected void onResume() {
         super.onResume();
@@ -235,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void logthis(String item) {
-        if (!item.equals("")) {
+        if (!item.isEmpty()) {
             binding.logger.append(item + "\n");
             Log.w(TAG, item);
         }

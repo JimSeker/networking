@@ -106,9 +106,9 @@ public class MainActivity extends AppCompatActivity {
     //as a string, with line separators (ie end of line markers)
     private String readStream(InputStream in) {
         BufferedReader reader = null;
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder();
         String line = "";
-        String NL = System.getProperty("line.separator");
+        String NL = System.lineSeparator();
         try {
             reader = new BufferedReader(new InputStreamReader(in));
             while ((line = reader.readLine()) != null) {

@@ -73,7 +73,7 @@ public class myDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        LayoutInflater inflater = LayoutInflater.from(requireActivity());
+        LayoutInflater inflater = getLayoutInflater();
         // Inflate the layout for this fragment
         FragmentMyDialogBinding binding = FragmentMyDialogBinding.inflate(inflater);
 

@@ -1,17 +1,11 @@
 package edu.cs4730.restdemo2;
 
-
-import android.content.Context;
-
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-
 import java.util.ArrayList;
 
 import edu.cs4730.restdemo2.databinding.RowlayoutBinding;
@@ -30,10 +24,12 @@ class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
 
     // Define listener member variable
     private OnItemClickListener listener;
+
     // Define the listener interface
     interface OnItemClickListener {
         void onItemClick(String mid, String mtitle, String mbody);
     }
+
     // Define the method that allows the parent activity or fragment to define the listener
     void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
@@ -45,6 +41,7 @@ class myAdapter extends RecyclerView.Adapter<myAdapter.ViewHolder> {
         this.mContext = context;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         RowlayoutBinding v = RowlayoutBinding.inflate(LayoutInflater.from(mContext), viewGroup, false);

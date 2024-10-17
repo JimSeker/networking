@@ -25,7 +25,7 @@ public class PictureFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        LayoutInflater inflater = LayoutInflater.from(requireActivity());
+        LayoutInflater inflater = getLayoutInflater();
         // Inflate the layout for this fragment
         FragmentPictureBinding binding = FragmentPictureBinding.inflate(inflater);
 
@@ -37,7 +37,7 @@ public class PictureFragment extends DialogFragment {
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(requireActivity(), R.style.Theme_AppCompat));
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(requireActivity(), androidx.appcompat.R.style.Theme_AppCompat));
         builder.setView(binding.getRoot());
 
         Dialog dialog = builder.create();

@@ -1,13 +1,12 @@
 package edu.cs4730.restdemo3;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.appcompat.widget.Toolbar;
+
 
 import android.util.Log;
 import android.view.View;
@@ -101,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             BufferedReader reader = null;
             StringBuilder sb = new StringBuilder();
             String line = "";
-            String NL = System.getProperty("line.separator");
+            String NL = System.lineSeparator();
             try {
                 reader = new BufferedReader(new InputStreamReader(in));
                 while ((line = reader.readLine()) != null) {
