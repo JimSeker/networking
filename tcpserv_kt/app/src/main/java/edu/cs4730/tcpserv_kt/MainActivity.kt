@@ -4,10 +4,13 @@ import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.text.format.Formatter
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import edu.cs4730.tcpserv_kt.databinding.ActivityMainBinding
 import java.io.*
 import java.net.ServerSocket
@@ -42,7 +45,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        ViewCompat.setOnApplyWindowInsetsListener(
+            binding.main
+        ) { v: View, insets: WindowInsetsCompat ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
         binding.logger.append("\n\n")
         binding.makeconn.setOnClickListener {
             //this way creates the thread anonymously.  quick and dirty, but generally a bad idea.
