@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/main_Fragment">
+    <fragment
+        android:id="@+id/main_Fragment"
+        android:name="edu.cs4730.tcpdemo.MainFragment"
+        android:label="fragment_help"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_help_to_client"
+            app:destination="@id/client_Fragment" />
+        <action
+            android:id="@+id/action_help_to_server"
+            app:destination="@id/server_Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/client_Fragment"
+        android:name="edu.cs4730.tcpdemo.ClientFragment"
+        android:label="fragment_client"
+        tools:layout="@layout/fragment_client" />
+    <fragment
+        android:id="@+id/server_Fragment"
+        android:name="edu.cs4730.tcpdemo.ServerFragment"
+        android:label="fragment_server"
+        tools:layout="@layout/fragment_server" />
+</navigation>

@@ -15,13 +15,9 @@ Android Network Examples
 
 `HttpUrlConDemothread` (java) show how to use the HttpUrlconnection to connect to website and download the webpage.  Uses a Thread.
 
-`tcpserv` (java) is one part of 2 apps (`tcpclient`).   They demo how two apps can communicate via a socket.  Assumes emulators, but if you know the IP address of TCPServ app, it will work on phones.
+`TcpDemo` (java) is complete example with 2 fragments.  One is the client code and the other is server code.  on 2 different phones/emulators choose one for the client and the other for the server code.  It shows how to do basic network code.  they communicate via network socket.
 
-`tcpserv_kt` (kotlin) is one part of 2 apps (`tcpclient_kt`).   They demo how two apps can communicate via a socket.  Assumes emulators, but if you know the IP address of TCPServ app, it will work on phones.  note it will work java client as well.
-
-`TCPclient` (java) is one part of 2 apps (`tcpserv`).  They demo how two apps can communicate via a socket.  Assumes emulators, but if you know the IP address of TCPServ app, it will work on phones.
-
-`TCPclient_kt` (kotlin) is one part of 2 apps (`tcpserv_kt`).  They demo how two apps can communicate via a socket.  Assumes emulators, but if you know the IP address of TCPServ app, it will work on phones.  Note it will work the java server as well.
+`TcpDemo_kt` (kotlin) is complete example with 2 fragments.  One is the client code and the other is server code.  on 2 different phones/emulators choose one for the client and the other for the server code.  It shows how to do basic network code.  they communicate via network socket.
 
 `WebVeiwDemo` shows how to use the webView widget.
 
