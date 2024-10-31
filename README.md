@@ -3,6 +3,8 @@ Android Network Examples
 
 `depreciated/` is the httpClientDemo 1 and 2, which can't be used at api23+.  httpclient has been removed.  No longer updated. Here for historial reasons only.
 
+`legacy` is older examples, which may still work.  but are no longer updated.
+
 `eclipse/` is the examples for use in eclipse.  This is no longer updated.  The rest of the examples are in Android studio format.
 
 `JavaNetwork/` shows simple client and server code in java (not Android)
