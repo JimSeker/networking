@@ -2,6 +2,7 @@ package edu.cs4730.httpurlcondemothread;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.security.NetworkSecurityPolicy;
 import android.view.View;
@@ -27,7 +28,7 @@ import edu.cs4730.httpurlcondemothread.databinding.ActivityMainBinding;
  * <p>
  * Note, https://koz.io/android-m-and-the-war-on-cleartext-traffic/
  * In the AndroidManifest.xml there is < application ... android:usesCleartextTraffic="true" ...
- * The test server doesn't have a legit cert, so... @#$@ it, cleartext it is.
+ * The test server doesn't have a legit cert, so... @#$@ it, cleartext it is. But our main server does have a cert to test with.
  * For real app, with legit certs on web servers, you should use https and remove the above.
  */
 
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     }
 
     //handler which can update the screen and in this case show the html and messages.
-    private Handler handler = new Handler(new Handler.Callback() {
+    private final Handler handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             binding.output.append(msg.getData().getString("msg"));
@@ -90,9 +91,9 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     //as a string, with line separators (ie end of line markers)
     private String readStream(InputStream in) {
         BufferedReader reader = null;
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder();
         String line = "";
-        String NL = System.getProperty("line.separator");
+        String NL = System.lineSeparator();
         try {
             reader = new BufferedReader(new InputStreamReader(in));
             while ((line = reader.readLine()) != null) {

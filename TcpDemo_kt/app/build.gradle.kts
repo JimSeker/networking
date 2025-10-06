@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "edu.cs4730.tcpdemo_kt"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "edu.cs4730.tcpdemo_kt"
-        minSdk = 29
-        targetSdk = 35
+        minSdk = 31
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -45,7 +45,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation ("androidx.navigation:navigation-fragment:2.8.2")
-    implementation ("androidx.navigation:navigation-ui:2.8.2")
+    implementation ("androidx.navigation:navigation-fragment:2.9.5")
+    implementation ("androidx.navigation:navigation-ui:2.9.5")
 }
 

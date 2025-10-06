@@ -26,11 +26,11 @@ import androidx.core.view.WindowInsetsCompat;
 import edu.cs4730.httpurlcondemoasync.databinding.ActivityMainBinding;
 
 /**
- * Example using a Async task to get a web page.
+ * Example using a Async task to get a web page.  Async is deprecated in API30, but still works.
  * <p>
  * Note, https://koz.io/android-m-and-the-war-on-cleartext-traffic/
  * In the AndroidManifest.xml there is < application ... android:usesCleartextTraffic="true" ...
- * The test server doesn't have a legit cert, so... @#$@ it, cleartext it is.
+ * The test server doesn't have a legit cert, so... @#$@ it, cleartext it is.  But our main server does have a cert to test with.
  * For real app, with legit certs on web servers, you should use https and remove the above.
  */
 
