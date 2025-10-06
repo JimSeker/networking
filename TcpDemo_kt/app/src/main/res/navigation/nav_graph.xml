@@ -6,7 +6,7 @@
     app:startDestination="@id/main_Fragment">
     <fragment
         android:id="@+id/main_Fragment"
-        android:name="edu.cs4730.tcpdemo.MainFragment"
+        android:name="edu.cs4730.tcpdemo_kt.MainFragment"
         android:label="fragment_help"
         tools:layout="@layout/fragment_main">
         <action
@@ -18,12 +18,12 @@
     </fragment>
     <fragment
         android:id="@+id/client_Fragment"
-        android:name="edu.cs4730.tcpdemo.ClientFragment"
+        android:name="edu.cs4730.tcpdemo_kt.ClientFragment"
         android:label="fragment_client"
         tools:layout="@layout/fragment_client" />
     <fragment
         android:id="@+id/server_Fragment"
-        android:name="edu.cs4730.tcpdemo.ServerFragment"
+        android:name="edu.cs4730.tcpdemo_kt.ServerFragment"
         android:label="fragment_server"
         tools:layout="@layout/fragment_server" />
 </navigation>
