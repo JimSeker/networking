@@ -6,12 +6,12 @@ import android.os.Looper;
 import android.os.Message;
 import android.security.NetworkSecurityPolicy;
 import android.view.View;
-import android.widget.Button;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -32,9 +32,8 @@ import edu.cs4730.httpurlcondemothread.databinding.ActivityMainBinding;
  * For real app, with legit certs on web servers, you should use https and remove the above.
  */
 
-public class MainActivity extends AppCompatActivity implements Button.OnClickListener {
+public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,13 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return WindowInsetsCompat.CONSUMED;
         });
-        binding.makeconn.setOnClickListener(this);
+        binding.makeconn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new doNetwork()).start();
+
+            }
+        });
 
         binding.output.append("\n");
         if (NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted()) {
@@ -54,14 +59,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         } else {
             binding.output.append("Clear Text traffic is NOT allowed.\n");
         }
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        //anonymous thread created here to get the webpage
-        // All network must be done on a thread/async now or the OS will force the app.
-        new Thread(new doNetwork()).start();
 
     }
 
@@ -114,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     }
 
     /**
-     * actual thread class that calls executeHpptGet() above.
+     * actual thread class that calls readStream() above.
      */
     class doNetwork implements Runnable {
         public void run() {
@@ -135,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 con.disconnect();
             } catch (Exception e) {
                 mkmsg("Failed to retrieve web page ...\n");
-                mkmsg(e.getMessage());
+                mkmsg( "msg: " + e.getMessage());
                 //e.printStackTrace();
             }
         }
