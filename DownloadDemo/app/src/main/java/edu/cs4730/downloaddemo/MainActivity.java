@@ -41,10 +41,9 @@ import edu.cs4730.downloaddemo.databinding.ActivityMainBinding;
  * This is a simple example of how to use the download manager.  except not really that simple anymore with all permissions needed.
  * Also I need a much larger file, even 15MB is just to quick.  I don't seem to be able to get an on going notification anymore.
  * using https://www.learningcontainer.com/sample-jpeg-file-download-for-testing/
- *
- * We ask for read permission in the manifest, but it is not needed to download a file.  only to read it back.
- * Except we don't read the file after downloading it. The READ_MEDIA_VISUAL actually makes no
- * sense for this example, since it is for user selected files, but I added it anyway to show how it.
+ * <p>
+ * We could ask for read permission in the manifest, but it is not needed to download a file.  only to read it back, which it doesn't.
+ * So this example only ask for write permissions.
  */
 
 
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityResultLauncher<String[]> rpl;
     private String[] REQUIRED_PERMISSIONS;
+
     /**
      * Called when the activity is first created.
      */
@@ -83,10 +83,8 @@ public class MainActivity extends AppCompatActivity {
             return WindowInsetsCompat.CONSUMED;
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {  //API 34+  add in READ_MEDIA_VISUAL_USER_SELECTED.
-            REQUIRED_PERMISSIONS = new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION, Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED};
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {  //For API 33+
-            REQUIRED_PERMISSIONS = new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION, Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.POST_NOTIFICATIONS};
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {  //For API 33+
+            REQUIRED_PERMISSIONS = new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION, Manifest.permission.POST_NOTIFICATIONS};
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {  //For API 29+ (q) to 32.
             REQUIRED_PERMISSIONS = new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION};
         } else { //for 26 to 28.
@@ -111,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 
-        findViewById(R.id.download).setOnClickListener(new Button.OnClickListener() {
+        binding.download.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View arg0) {
 
@@ -119,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        findViewById(R.id.download2).setOnClickListener(new Button.OnClickListener() {
+        binding.download2.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 downloadfilenonoti();
@@ -169,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         //request.allowScanningByMediaScanner();
         download_id = downloadManager.enqueue(request);
     }
-
 
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag") //lent, learn if statements.

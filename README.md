@@ -13,6 +13,8 @@ Android Network Examples
 
 `DownloadDemo` (java) shows how to use the Download service in android to files via http protocol.  ie downloading pictures.
 
+`DownloadDemo_kt` (kotlin) shows how to use the Download service in android to files via http protocol.  ie downloading pictures.
+
 `HttpUrlConDemoAsync` (java) show how to use the HttpUrlconnection to connect to website and download the webpage.  Uses an AsyncTask, depreciated. 
 
 `HttpUrlConDemothread` (java) show how to use the HttpUrlconnection to connect to website and download the webpage.  Uses a Thread.
