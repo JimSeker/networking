@@ -23,7 +23,9 @@ Android Network Examples
 
 `TcpDemo_kt` (kotlin) is complete example with 2 fragments.  One is the client code and the other is server code.  on 2 different phones/emulators choose one for the client and the other for the server code.  It shows how to do basic network code.  they communicate via network socket.
 
-`WebVeiwDemo` shows how to use the webView widget.
+`WebVeiwDemo` (java) shows how to use the webView widget. Also uses menus.
+
+`WebVeiwDemo_kt` (kotlin) shows how to use the webView widget. Also uses menus.
 
 ---
 

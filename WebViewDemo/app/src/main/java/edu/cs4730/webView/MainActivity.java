@@ -24,7 +24,7 @@ import edu.cs4730.webView.databinding.ActivityMainBinding;
  * A simple example that shows how to use the webview widget in an app.
  * Added the safe browsing meta tag to the manifest.  no page to test with so I don't actually know if it works.
  * <p>
- * A note, not all mobile pages allow zooming by default, UW's main page doesn't.  Then again, their web programmers are dumbasses too.  Look at their pages source code, dead obvious.
+ * A note, not all mobile pages allow zooming by default, UW's main page doesn't, so I used my own pages for the demo.
  */
 
 public class MainActivity extends AppCompatActivity {
@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private class CallBack extends WebViewClient {
 
-        //API 24+, so the N check is just for studio to shut up about it.
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             Log.d("over", request.getUrl().toString());
             view.loadUrl(request.getUrl().toString());
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * This is intercepting the back key and then using it to go back in the browser pages
-     * if there is a previous.
+     * if there is a previous.  A note in android 16, API 36 if may not intercept the back key anymore.
      */
 
     @Override
@@ -128,6 +127,16 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.exit) {
             finish();
+            return true;
+        } else if (id == R.id.forward) {
+            if (binding.webkit.canGoForward()) {
+                binding.webkit.goForward();
+            }
+            return true;
+        } else if (id == R.id.back) {
+            if (binding.webkit.canGoBack()) {
+                binding.webkit.goBack();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
