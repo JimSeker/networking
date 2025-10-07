@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Shows how to use a thread with a httpURLconnection method to query the REST service.
-     * Note this was a asynctask, I just convereted to a thread, but keep all the methods.
+     * Note this was a asynctask, I just converted to a thread, but keep all the methods.
      */
     private class doNetwork implements Runnable {
         ArrayList<myObj> list = null;
