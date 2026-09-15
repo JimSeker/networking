@@ -3,19 +3,16 @@ plugins {
 }
 
 android {
-    namespace = "edu.cs4730.downloaddemo_kt"
+    namespace = "edu.cs4730.httpurlcondemoasync"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "edu.cs4730.downloaddemo_kt"
+        applicationId = "edu.cs4730.httpurlcondemoasync"
         minSdk = 32
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -35,9 +32,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
     implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
 }
