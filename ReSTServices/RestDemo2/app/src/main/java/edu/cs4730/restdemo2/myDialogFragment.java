@@ -81,7 +81,7 @@ public class myDialogFragment extends DialogFragment {
             binding.etTitle.setText(mParam3);
             binding.etBody.setText(mParam4);
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(requireActivity(), R.style.Theme_AppCompat));
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(requireActivity(), androidx.appcompat.R.style.Theme_AppCompat));
         builder.setView(binding.getRoot());
 
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
