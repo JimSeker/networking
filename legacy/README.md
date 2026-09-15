@@ -11,6 +11,9 @@ These examples have been replaced with better examples and will no longer be upd
 
 `TCPclient_kt` (kotlin) is one part of 2 apps (`tcpserv_kt`).  They demo how two apps can communicate via a socket.  Assumes emulators, but if you know the IP address of TCPServ app, it will work on phones.  Note it will work the java server as well.
 
+`HttpClientDemo` and `HttpClientDemo2` are both deprecated.  They will on compile on API 23+   httpclient has been removed. Here for historial reasons only.
+
+
 ---
 
 These are example code for University of Wyoming, Cosc 4730 Mobile Programming course and cosc 4735 Advance Mobile Programing course. 
