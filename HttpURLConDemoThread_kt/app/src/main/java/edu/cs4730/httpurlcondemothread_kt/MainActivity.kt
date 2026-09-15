@@ -1,4 +1,4 @@
-package edu.cs4730.httpurlcondemothead_kt
+package edu.cs4730.httpurlcondemothread_kt
 
 import android.os.Bundle
 import android.os.Handler
@@ -8,7 +8,7 @@ import android.security.NetworkSecurityPolicy
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import edu.cs4730.httpurlcondemothead_kt.databinding.ActivityMainBinding
+import edu.cs4730.httpurlcondemothread_kt.databinding.ActivityMainBinding
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream

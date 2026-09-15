@@ -1,19 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
 }
 
 android {
-    namespace = "edu.cs4730.httpurlcondemothead_kt"
-    compileSdk = 36
+    namespace = "edu.cs4730.httpurlcondemothread_kt"
+    compileSdk = 37
 
     defaultConfig {
-        applicationId = "edu.cs4730.httpurlcondemothead_kt"
-        minSdk = 31
-        targetSdk = 36
+        applicationId = "edu.cs4730.httpurlcondemothread_kt"
+        minSdk = 32
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
-
     }
 
     buildTypes {
@@ -26,11 +24,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         viewBinding = true
@@ -38,11 +33,9 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-
 }
