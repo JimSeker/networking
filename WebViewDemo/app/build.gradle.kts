@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "edu.cs4730.tcpdemo"
+    namespace = "edu.cs4730.webView"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "edu.cs4730.tcpdemo"
+        applicationId = "edu.cs4730.webView"
         minSdk = 32
         targetSdk = 37
         versionCode = 1
@@ -19,7 +19,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.txt"
             )
         }
     }
@@ -33,10 +33,9 @@ android {
 }
 
 dependencies {
-    implementation(libs.appcompat)
+
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
-    implementation(libs.activity)
-    implementation(libs.constraintlayout)
-    implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
 }

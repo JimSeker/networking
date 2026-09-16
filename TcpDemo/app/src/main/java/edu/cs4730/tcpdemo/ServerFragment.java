@@ -22,7 +22,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import edu.cs4730.tcpdemo.databinding.FragmentServerBinding;
-import kotlin.Suppress;
 
 
 public class ServerFragment extends Fragment {
@@ -60,7 +59,6 @@ public class ServerFragment extends Fragment {
         //What is our IP address?
         WifiManager wm = (WifiManager) requireActivity().getSystemService(Service.WIFI_SERVICE);
         //noinspection deprecation    wifi can't return a ipv6, which is what the issue is, formater doesn't support ipv6
-        @Suppress(names = "DEPRECATION")
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
         binding.logger.append("Server IP address is " + ip + "\n");
 
@@ -99,7 +97,7 @@ public class ServerFragment extends Fragment {
                 Log.v(TAG, "S: Connecting...");
                 ServerSocket serverSocket = new ServerSocket(p);
 
-                //socket created, now wait for a coonection via accept.
+                //socket created, now wait for a connection via accept.
                 Socket client = serverSocket.accept();
                 Log.v(TAG, "S: Receiving...");
 

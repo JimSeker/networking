@@ -19,7 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import edu.cs4730.webView.databinding.ActivityMainBinding;
 
 /**
- * Had to a android:usesCleartextTraffic="true" to get it read none https web sites.  dumb... really stupid android.
+ * Had to add android:usesCleartextTraffic="true" to get it read none https websites.  dumb... really stupid android.
  * <p>
  * A simple example that shows how to use the webview widget in an app.
  * Added the safe browsing meta tag to the manifest.  no page to test with so I don't actually know if it works.
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * This is override, so i can intercept when a user clicks a link, so it won't leave the app.
+     * This is override, so I can intercept when a user clicks a link, so it won't leave the app.
      */
     private class CallBack extends WebViewClient {
 
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * This is intercepting the back key and then using it to go back in the browser pages
-     * if there is a previous.  A note in android 16, API 36 if may not intercept the back key anymore.
+     * if there is a previous.  A note in android 16, API 36 you should not intercept the back key anymore.
      */
 
     @Override
