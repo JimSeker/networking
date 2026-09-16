@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * This is override, so i can intercept when a user clicks a link, so it won't leave the app.
+     * This is override, so I can intercept when a user clicks a link, so it won't leave the app.
      */
     private inner class CallBack : WebViewClient() {
         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * This is intercepting the back key and then using it to go back in the browser pages
-     * if there is a previous.  A note in android 16, API 36 if may not intercept the back key anymore.
+     * if there is a previous.  A note in android 16, API 36 you should not intercept the back key anymore.
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if ((keyCode == KeyEvent.KEYCODE_BACK) && binding.webkit.canGoBack()) {
