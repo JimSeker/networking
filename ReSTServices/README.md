@@ -6,6 +6,8 @@ Demo of how to use rest services with android.
 
 `RestDemo2` show insert, update, query, and delete using a local ReST API.  note, the webserver is likely unaccessible from the outside world.  See the www directory for the necessary web scripts.
 
+`RestDemo2v2` A cleaned up version of ReSTDemo2, where all the networking and data is moved into a viewmodel, so the main code is simple back to controller code.   See the www directory for the necessary web scripts.
+
 `RestDemo3` show a simple image display app, using a webserver to get the list and then it uses an thread to retrieve the images.
 
 `www` are php scripts used for ReSTDemo2.  You will need a machine with php and Maria/Mysql to run these.

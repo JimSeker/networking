@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements myDialogFragment.
         }
 
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //the user clicked the add button, so start the dialog with for add.
